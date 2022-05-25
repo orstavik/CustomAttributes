@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+
+<style>
+  [at-toggle]:not([open]) > :not(h1) {
+    display: none;
+  }
+</style>
+
+<h2>here is context menu and text selection</h2>
+
+<h2 no-contextmenu>no context menu here, but there is text selection</h2>
+
+<h2 no-selectstart>no text selection here, but there is context menu</h2>
+
+<h2 no-selectstart no-contextmenu>no text selection nor contextmenu</h2>
+
+<script type="module">
+  import {upgradeAttributes} from "../../src/customGlobalHandlerAttributes.js";
+
+  upgradeAttributes(...document.querySelectorAll("*"));
+</script>

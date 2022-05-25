@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+
+<script>
+  class WebComp extends HTMLElement {
+    constructor() {
+      super();
+      const shadow = this.attachShadow({mode: "closed"});
+      //language=HTML
+      shadow.innerHTML = `
+        <slot></slot>
+        <hr id="abc">
+        <style>
+          :host {
+            border: 2px dotted grey;
+            display: block;
+          }
+          hr { height: 20px; }
+        </style>
+      `;
+      this.hr = shadow.children[1];
+    }
+
+    low(e) {
+      const background = this.style.background;
+      if (background === "red")
+        this.style.background = "white";
+      else
+        this.style.background = "red";
+      console.log("toggle", e);
+    }
+
+    high(e) {
+      const borderWidth = parseInt(this.style.borderWidth) || 0;
+      this.style.border = `${borderWidth + 2}px solid blue`;
+      console.log("highlight", e);
+    }
+  }
+
+  customElements.define("web-comp", WebComp);
+</script>
+
+<web-comp once-auxclick="high low high high">hello auxclick</web-comp>
+<h1 on-click_shift="toggle highlight">hello on-click_shift</h1>
+<h4 hello="sunshine" on-click="iHaveBeenReclicked">hello re-click target</h4>
+
+<script type="module">
+  import {upgradeAttributes} from "../../src/customGlobalHandlerAttributes.js";
+
+  const h1 = document.querySelector("h1");
+  const webComp = document.querySelector("web-comp");
+  const hrInsideShadow = webComp.hr;
+  hrInsideShadow.setAttribute("re-click", '[hello="sunshine"]');
+  const h4 = document.querySelector("h4");
+  upgradeAttributes(h1, webComp, h4, hrInsideShadow);
+
+  h4.iHaveBeenReclicked = function (e) {
+    console.log("i have been reclicked");
+    this.style.background = "yellow";
+    console.log("target", e.target);
+    console.log("relatedTarget", e.relatedTarget);
+    console.log("relatedTargetQueries", e.relatedTargetQueries);
+  }.bind(h4);
+
+  function toggle(e) {
+    const background = this.style.background;
+    if (background === "red")
+      this.style.background = "white";
+    else
+      this.style.background = "red";
+    console.log("toggle", e);
+  }
+
+  function highlight(e) {
+    this.style.border = "2px solid blue";
+    console.log("highlight", e);
+  }
+
+  h1.highlight = highlight.bind(h1);
+  h1.toggle = toggle.bind(h1);
+
+</script>

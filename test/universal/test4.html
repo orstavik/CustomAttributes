@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+
+<script type="module">
+  import {upgradeAttributes} from "../../src/customGlobalHandlerAttributes.js";
+
+  class SuggestionComponentSelector extends HTMLElement {
+
+    constructor() {
+      super();
+      this.attachShadow({mode: "open"});
+      //language=HTML
+      this.shadowRoot.innerHTML = `
+        <style>
+
+        </style>
+        <style>
+          ::slotted(*) {
+            display: none;
+          }
+          ::slotted([selected]) {
+            background-color: yellow;
+          }
+        </style>
+        Select here: <input type="text" value="ab" attr-input="suggestion=value=>:host">
+        <ul>
+          <slot></slot>
+        </ul>
+      `;
+      upgradeAttributes(this.shadowRoot.querySelector("input"));
+    }
+
+    //selects all the visible children  //toggleAll
+    selectAll(e) {
+      const slotted = this.shadowRoot.querySelector("slot").assignedElements({flatten: true});
+      // const slotted = this.children.flatten();
+      const slottedVisible = slotted.filter(el => getComputedStyle(el).display !== "none");
+      for (let el of slottedVisible)
+        el.setAttributeNode(document.createAttribute("selected"));
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+      //language=CSS
+      let text = "::slotted(*) {display: block;}";
+      if (newValue)  //language=CSS
+        text = `::slotted([name*="${newValue}"]) { display: block; }`;
+      this.shadowRoot.children[0].innerText = text;
+    }
+
+    static get observedAttributes() {
+      return ["suggestion"];
+    }
+  }
+
+  customElements.define("suggest-list", SuggestionComponentSelector);
+</script>
+
+<style>
+</style>
+
+<suggest-list do-keyup_ctrl-a="selectAll">
+  <li name="abajherqwerxljdf">abajherqwerxljdf</li>
+  <li name="abkwejrpoisdc">abkwejrpoisdc</li>
+  <li name="aleabkrjupoivfmpaos">aleabkrjupoivfmpaos</li>
+  <li name="aksedujrpoiejvflsakdf">aksedujrpoiejvflsakdf</li>
+</suggest-list>
+
+<script type="module">
+  import {upgradeAttributes} from "../../src/customGlobalHandlerAttributes.js";
+
+  upgradeAttributes(document.querySelector("suggest-list"));
+</script>

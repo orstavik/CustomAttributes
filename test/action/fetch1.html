@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+
+<h1 action="https://bbc.com" method="post" co-click="submit">is this working?</h1>
+<script type="module">
+  import {upgradeAttributes} from "../../src/customGlobalHandlerAttributes.js";
+  import {} from "./hrefActionFetch2.js";
+
+  upgradeAttributes(...document.querySelectorAll("*"));
+</script>
