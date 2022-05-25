@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+
+<web-comp></web-comp>
+<h2 on-click="sayHi">hello re-click</h2>
+
+<script type="module">
+  import {upgradeAttributes} from "../../src/customGlobalHandlerAttributes.js";
+
+  class WebComp extends HTMLElement {
+    constructor() {
+      super();
+      const shadow = this.attachShadow({mode: "open"});
+      //language=HTML
+      shadow.innerHTML = `
+        <h1 re-click="h2">hello</h1>
+        <h2>darkness</h2>
+      `;
+    }
+  }
+
+  customElements.define("web-comp", WebComp);
+  const h2 = document.querySelector("h2");
+  const shadowH1 = document.querySelector("web-comp").shadowRoot.children[0];
+
+  h2.sayHi = function (e) {
+    console.log("hi " + e.type);
+  }
+  upgradeAttributes(shadowH1, h2);
+  h2.click();
+  shadowH1.click();
+</script>
