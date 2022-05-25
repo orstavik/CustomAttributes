@@ -132,6 +132,22 @@ function throwAsyncError(err) {
   runDefaultAction(event, _ => console.error(err));
 }
 
+function currentTargetAndUpLighterDomOnly(path, ownerElement) {
+  let ancestorElementsInComposedPath = path.slice(path.indexOf(ownerElement));
+  let res = [], document, targetDocument = ownerElement.getRootNode();
+  for (let el of ancestorElementsInComposedPath) {
+    //all slotting elements are excluded, but not a slot in the same document as the target. Fallback nodes are ok.
+    if (el instanceof HTMLSlotElement && el.getRootNode() !== targetDocument)
+      document = el.getRootNode();
+    else if (document) {
+      if (el === document)
+        document = undefined;
+    } else
+      res.push(el);
+  }
+  return res;
+}
+
 function UniversalAttribute(name) {
   const regex = /(on|once|re|do|co|at|no|attr)-([^_]+)(_(.+))?/;
   const [_, type, eventName, __, filter] = name.match(regex) || [];
@@ -181,8 +197,10 @@ function UniversalAttribute(name) {
 
     attr(e) {
       const [_, atName, _2, propName, _3, query] = this.value.match(/([^=]+)(=([^=]*))(=>(.*))?/);
-      const path = e.composedPathFixed;
-      const target = findNearestParentMatching(path.slice(path.indexOf(this.ownerElement)), query);
+      const path = currentTargetAndUpLighterDomOnly(e.composedPathFixed, this.ownerElement);
+      //remove elements between <slot> and document
+      //filter away, so that if a parent element is a <slot>, then we must skip all the other elements up to and including that slot elements document.
+      const target = findNearestParentMatching(path, query);
       if (!propName)
         target.hasAttribute(atName) ? target.removeAttribute(atName) : target.setAttributeNode(document.createAttribute(atName));
       else
