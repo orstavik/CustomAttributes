@@ -1,13 +1,19 @@
-<h1 on-click="sayHi">hello on-click_shift</h1>
+<h1 on-click="sayHi" on-auxclick_ctrl="sayGoodbye" on-contextmenu_alt-meta="sayHi sayGoodbye sayHi">hello on-click_shift</h1>
 
 <script type="module">
   import {upgradeAttributes} from "../../src/customGlobalHandlerAttributes.js";
 
   const h1 = document.querySelector("h1");
   h1.sayHi = function (e) {
-    console.log("hello sunshine ", e.type);
+    console.log("Hello sunshine "+ e.type);
+  }.bind(h1);
+  h1.sayGoodbye = function (e) {
+    console.log("Goodbye sunshine "+ e.type);
   }.bind(h1);
 
   upgradeAttributes(h1);
   h1.click();
+  h1.dispatchEvent(new MouseEvent("auxclick", {ctrlKey: true}));
+  h1.dispatchEvent(new MouseEvent("contextmenu", {altKey: true, metaKey: true}));
+  h1.dispatchEvent(new MouseEvent("auxclick", {ctrlKey: true}));
 </script>

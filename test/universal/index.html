@@ -1,6 +1,18 @@
 <test-html test="on-click.html">
   <script expected>
-    ["Hello sunshine", " click"]
+    [
+      "Hello sunshine click",
+      "Goodbye sunshine auxclick",
+      "Hello sunshine contextmenu",
+      "Goodbye sunshine contextmenu",
+      "Hello sunshine contextmenu",
+      "Goodbye sunshine auxclick"
+    ]  </script>
+</test-html>
+
+<test-html test="once-click.html">
+  <script expected>
+    ["Hello sunshine click"]
   </script>
 </test-html>
 
