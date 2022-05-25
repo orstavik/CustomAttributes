@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-
 <style>
   [at-toggle]:not([open]) > :not(h1) {
     display: none;
@@ -16,7 +14,9 @@
 
   const div = document.querySelector("div");
   const h1 = document.querySelector("h1");
+  const p = document.querySelector("p");
   upgradeAttributes(div, h1);
-  div.addEventListener("click", e => console.log(e.type, e.target));
-  div.addEventListener("toggle", e => console.log(e.type, e.target));
+  console.log(getComputedStyle(p).display);
+  h1.click();
+  setTimeout(_ => console.log(getComputedStyle(p).display), 10);
 </script>
