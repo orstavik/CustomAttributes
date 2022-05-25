@@ -27,6 +27,24 @@ async function DoSomethingStrange() {
 }
 ```
 
+Sleep is an alternative way to achieve the same outcome as setTimeout.
+
+```javascript
+async function oneWay() {
+  console.log(1);
+  await sleep(50);
+  console.log(2);
+}
+
+function anotherWay(){
+  console.log(1);
+  setTimeout(function(){
+    console.log(2);
+  }, 50);
+}
+```
+
+
 ## WhatIs: `nextTick(cb)`
 
 ```javascript
