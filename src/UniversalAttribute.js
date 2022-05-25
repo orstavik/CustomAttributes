@@ -126,7 +126,7 @@ function findNearestParentMatching(path, queryOG) {
   return path.find(el => el.matches(query));
 }
 
-function throwAsyncError(err) {
+export function throwAsyncError(err) {
   const event = new Event("error", err);
   window.dispatchEvent(event); //todo don't fully remember how to do this one.
   runDefaultAction(event, _ => console.error(err));
@@ -148,7 +148,7 @@ function currentTargetAndUpLighterDomOnly(path, ownerElement) {
   return res;
 }
 
-function UniversalAttribute(name) {
+export function UniversalAttribute(name) {
   const regex = /(on|once|re|do|co|at|no|attr)-([^_]+)(_(.+))?/;
   const [_, type, eventName, __, filter] = name.match(regex) || [];
   if (!type)
@@ -224,36 +224,6 @@ function UniversalAttribute(name) {
 
     do(e) {
       this.on(e);
-    }
-  }
-}
-
-//!!!customAttributes!!!
-
-const customAttributesImpl = {};
-window.customAttributes = {};
-Object.defineProperty(window.customAttributes, "define", {
-  value: function (key, constructor) {
-    if (customAttributesImpl[key])
-      throw new Error(key + " already defined");
-    customAttributesImpl[key] = constructor.prototype;
-  }
-});
-
-export function upgradeAttributes(...elems) {
-  for (let el of elems) {
-    for (let at of el.attributes) {
-      if (at.constructor !== Attr)
-        continue;
-      const definition = (customAttributesImpl[at.name] ??= UniversalAttribute(at.name)?.prototype);
-      if (!definition)
-        continue;
-      try {
-        Object.setPrototypeOf(at, definition);
-        at.upgrade();
-      } catch (err) {
-        throwAsyncError(err);
-      }
     }
   }
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <script type="module">
-  import {upgradeAttributes} from "../../src/customGlobalHandlerAttributes.js";
+  import {upgradeAttributes} from "../../src/customAttributes.js";
 
   class SuggestionComponentSelector extends HTMLElement {
 
@@ -65,7 +65,7 @@
 </suggest-list>
 
 <script type="module">
-  import {upgradeAttributes} from "../../src/customGlobalHandlerAttributes.js";
+  import {upgradeAttributes} from "../../src/customAttributes.js";
 
   upgradeAttributes(document.querySelector("suggest-list"));
 </script>
