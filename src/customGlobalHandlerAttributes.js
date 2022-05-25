@@ -129,7 +129,7 @@ function findNearestParentMatching(path, queryOG) {
 function throwAsyncError(err) {
   const event = new Event("error", err);
   window.dispatchEvent(event); //todo don't fully remember how to do this one.
-  runDefaultAction(event, _ => console.error(event));
+  runDefaultAction(event, _ => console.error(err));
 }
 
 function UniversalAttribute(name) {
@@ -161,6 +161,8 @@ function UniversalAttribute(name) {
     on(e) {
       for (let method of this.value.split(" ")) {
         try {
+          if (!(method in this.ownerElement))
+            throw `'.${method}' is not a function on element <${this.ownerElement.tagName}>. Is it a typo?`;
           this.ownerElement[method](e);
         } catch (err) {
           throwAsyncError(err);
