@@ -149,11 +149,11 @@ function currentTargetAndUpLighterDomOnly(path, ownerElement) {
 }
 
 export function UniversalAttribute(name) {
-  const regex = /(on|once|re|do|co|at|no|attr)-([^_]+)(_(.+))?/;
+  const regex = /(on|once|re|do|co|at|no|attr|log|debugger)-([^_]+)(_(.+))?/;
   const [_, type, eventName, __, filter] = name.match(regex) || [];
   if (!type)
     return;
-  const eventFilter = filter && makeEventFilter(eventName, filter.split("-"));
+  const eventFilter = filter && makeEventFilter(eventName, filter.split("-"));   //todo this looks wrong, it should be "_"?? like _shift_Enter??
   return class UniversalAttribute extends Attr {
 
     upgrade() {
@@ -193,6 +193,16 @@ export function UniversalAttribute(name) {
 
     no(e) {
       e.preventDefault();
+    }
+
+    log(e) {
+      console.log(e);
+    }
+
+    debugger(e) {
+      console.log(e);
+      console.log(e.currentTarget);
+      debugger;
     }
 
     attr(e) {
