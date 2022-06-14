@@ -53,49 +53,6 @@ function cloneEvent(e, type, relatedTarget = e.relatedTarget) {
   return event;
 }
 
-//todo different version of this for mouseEvents and for keyboard events.
-//1 is good, 0 is mismatch, -1 is irrelevant
-function metaKeyGood(k, e) {
-  k = k.toLowerCase();
-  return !["shift", "alt", "ctrl", "meta"].includes(k) ? -1 : +e[k + "Key"];
-}
-
-//numbers are checked against e.buttons
-function mouseKeysMissing(whitelist) {
-  return function (e) {
-    for (let key of whitelist) {
-      const validMeta = metaKeyGood(key, e);
-      if (validMeta === 1) continue;
-      if (validMeta === 0) return false;
-      //validMeta === -1, so we must try something else
-      if (key.match(/\d/) && e.buttons !== parseInt(key))
-        return true;
-    }
-  }
-}
-
-function keyboardKeysMissing(whitelist) {
-  return function (e) {
-    for (let key of whitelist) {
-      const validMeta = metaKeyGood(key, e);
-      if (validMeta === 1) continue;
-      if (validMeta === 0) return true;
-      //validMeta === -1, so we must try something else
-      if (key === "space" && e.key !== " ")
-        return true;
-      if (/[\w\d]+/.exec(key) && !e.key.match(key))  //todo exactly what format here?
-        return true;
-    }
-  }
-}
-
-//todo we are essentially making a filter/map for whitelist/matching against an event.
-//todo this is done before. find out good examples of others that have done it.
-function makeEventFilter(eventName, whitelist) {
-  //todo mouse is mouse- pointer- click auxclick contextmenu
-  return eventName.startsWith("key") ? keyboardKeysMissing(whitelist) : mouseKeysMissing(whitelist);
-}
-
 function atomicHostsOnly(path) {
   let slots = 0;
   return path.filter((el, i) => {
@@ -149,20 +106,17 @@ function currentTargetAndUpLighterDomOnly(path, ownerElement) {
 }
 
 export function UniversalAttribute(name) {
-  const regex = /(on|once|re|do|co|at|no|attr|log|debugger)-([^_]+)(_(.+))?/;
-  const [_, type, eventName, __, filter] = name.match(regex) || [];
+  const regex = /(on|once|re|do|co|at|no|attr|log|debugger)-(.+)/;
+  const [_, type, eventName] = name.match(regex) || [];
   if (!type)
     return;
-  const eventFilter = filter && makeEventFilter(eventName, filter.split("-"));   //todo this looks wrong, it should be "_"?? like _shift_Enter??
   return class UniversalAttribute extends Attr {
 
     upgrade() {
       this._listener = e => {
-        if (eventFilter && eventFilter(e))
-          return;
         if (["on", "once", "no"].includes(type))
-          this[type](e);
-        else
+          this[type](e);                                               //todo this async behavior could be syntactified..
+        else                                                           //todo such that :on-click is a sync reaction, while on-click is an async default action.
           runDefaultAction(e, _ => this[type](e));
       };
       this.ownerElement.addEventListener(eventName, this._listener);

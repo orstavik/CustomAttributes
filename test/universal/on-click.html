@@ -1,6 +1,7 @@
 <h1 on-click="sayHi" on-auxclick_ctrl="sayGoodbye" on-contextmenu_alt-meta="sayHi sayGoodbye sayHi">hello on-click_shift</h1>
 
 <script type="module">
+  import {} from "https://cdn.jsdelivr.net/gh/orstavik/customEvents/src/customEvents.js";
   import {upgradeAttributes} from "../../src/customAttributes.js";
 
   const h1 = document.querySelector("h1");
