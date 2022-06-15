@@ -1,15 +1,21 @@
 <h1 once-click_shift="sayHi">hello once-click_shift</h1>
 
 <script type="module">
-  import {} from "https://cdn.jsdelivr.net/gh/orstavik/customEvents/src/customEvents.js";
+  import {} from "https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.0/src/Event.defaultAction.js";
+  import {} from "https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.0/src/customEvents.js";
+
   import {upgradeAttributes} from "../../src/customAttributes.js";
+  import {OnceAttr} from "../../src/attributes/OnAttr.js";
+
+  customAttributes.define("once", OnceAttr);
 
   const h1 = document.querySelector("h1");
   h1.sayHi = function (e) {
-    console.log("Hello sunshine "+ e.type);
+    console.log("Hello sunshine " + e.type);
   }.bind(h1);
 
   upgradeAttributes(h1);
   h1.dispatchEvent(new PointerEvent("click", {shiftKey: true}));
-  h1.dispatchEvent(new PointerEvent("click", {shiftKey: true}));
+  //todo this happens sync, faster than the defaultAction..
+  setTimeout(_ => h1.dispatchEvent(new PointerEvent("click", {shiftKey: true})));
 </script>

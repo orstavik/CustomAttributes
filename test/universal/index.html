@@ -1,3 +1,9 @@
+<test-html test="on-click-simple.html">
+  <script expected>
+    ["Hello sunshine click"]
+  </script>
+</test-html>
+
 <test-html test="on-click.html">
   <script expected>
     [
@@ -7,7 +13,8 @@
       "Goodbye sunshine contextmenu",
       "Hello sunshine contextmenu",
       "Goodbye sunshine auxclick"
-    ]  </script>
+    ]
+  </script>
 </test-html>
 
 <test-html test="once-click.html">
@@ -16,9 +23,15 @@
   </script>
 </test-html>
 
-<test-html test="no-submit.html">
+<test-html test="no-click.html">
   <script expected>
-    ["hello sunshine submit1", "more sunshine"]
+    ["only sunshine"]
+  </script>
+</test-html>
+
+<test-html test="no-submit-native.html">
+  <script expected>
+    ["only sunshine"]
   </script>
 </test-html>
 

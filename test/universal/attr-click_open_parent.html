@@ -10,7 +10,13 @@
 </div>
 
 <script type="module">
+  import {} from "https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.0/src/Event.defaultAction.js";
+  import {} from "https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.0/src/customEvents.js";
+
   import {upgradeAttributes} from "../../src/customAttributes.js";
+  import {AttrAttr} from "../../src/attributes/AttrAttr.js";
+
+  customAttributes.define("attr", AttrAttr);
 
   const div = document.querySelector("div");
   const h1 = document.querySelector("h1");

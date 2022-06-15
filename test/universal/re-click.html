@@ -4,7 +4,14 @@
 <h2 on-click="sayHi">hello re-click</h2>
 
 <script type="module">
+  import {} from "https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.0/src/Event.defaultAction.js";
+  import {} from "https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.0/src/customEvents.js";
   import {upgradeAttributes} from "../../src/customAttributes.js";
+  import {OnAttr} from "../../src/attributes/OnAttr.js";
+  import {ReAttr} from "../../src/attributes/ReAttr.js";
+
+  customAttributes.define("on", OnAttr);
+  customAttributes.define("re", ReAttr);
 
   class WebComp extends HTMLElement {
     constructor() {
