@@ -10,8 +10,8 @@
 </div>
 
 <script type="module">
-  import {} from "https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.0/src/Event.defaultAction.js";
-  import {} from "https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.0/src/customEvents.js";
+  import {} from "https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.1/src/Event.defaultAction.js";
+  import {} from "https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.1/src/customEvents.js";
 
   import {upgradeAttributes} from "../../src/customAttributes.js";
   import {CoAttr} from "../../src/attributes/CoAttr.js";
@@ -26,5 +26,5 @@
   upgradeAttributes(div, h1);
   console.log(getComputedStyle(p).display);
   h1.click();
-  setTimeout(_ => console.log(getComputedStyle(p).display), 10);
+  setTimeout(_ => console.log(getComputedStyle(p).display), 20);
 </script>

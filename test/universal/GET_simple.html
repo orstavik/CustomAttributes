@@ -1,0 +1,17 @@
+<h1 get-click="#sunshine">hello sunshine</h1>
+
+<script type="module">
+  import {} from "https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.1/src/Event.defaultAction.js";
+  import {} from "https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.1/src/customEvents.js";
+  import {upgradeAttributes} from "../../src/customAttributes.js";
+  import {GETAttr} from "../../src/attributes/GetAttr.js";
+
+  customAttributes.define("get", GETAttr);
+
+  window.open = (...args) => console.log(...args.map(s => s.slice(-9)));//this is an interception to enable testing.
+
+  const h1 = document.querySelector("h1");
+  h1.getAttributeNode("get-click").value = location.href + h1.getAttributeNode("get-click").value;
+  upgradeAttributes(h1);
+  h1.click();
+</script>
