@@ -1,4 +1,8 @@
-import {throwAsyncError} from "./UniversalAttribute.js";
+function throwAsyncError(err) {
+  const event = new Event("error", err);
+  event.defaultAction = _=> console.error(err);
+  window.dispatchEvent(event);
+}
 
 const customAttributesImpl = {};
 const syncAttrs = {};
