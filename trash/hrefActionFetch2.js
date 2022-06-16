@@ -23,39 +23,39 @@ customAttributes.define("method", ConstrainAttr(["", "post", "get"]));
 customAttributes.define("target", ConstrainAttr(["", "_self", "_blank", "_top", "_parent"]));
 
 
-//The [name] attribute creates a .value getter on the ownerElement.
-//the .value reflects:
-// 1. [value]
-// 2. [src]
-// 3. the .value of the prototype
-// 4. [...children[name]]
-class NameAttr extends Attr {
-  upgrade() {
-    Object.defineProperty(this.ownerElement, "value", {
-      get: function getValue() {
-        if (this.hasAttribute("value"))
-          return this.getAttribute("value");
-        if (this.hasAttribute("src"))
-          return this.getAttribute("value");
-        //todo how should this work, should I look for the .value on the prototype??
-        // if("value" in Object.getPrototypeOf(this))
-        //   return Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this), "value").get.call(this);
-        if (!this.children.length)
-          return this.innerText;
-        const res = [];
-        for (let child of this.children)
-          res.push(this.getAttribute("name"));
-        return res;
-      }
-    });
-  }
-
-  remove() {
-    delete this.ownerElement.value;
-  }
-}
-
-customAttributes.define("name", NameAttr);
+// //The [name] attribute creates a .value getter on the ownerElement.
+// //the .value reflects:
+// // 1. [value]
+// // 2. [src]
+// // 3. the .value of the prototype
+// // 4. [...children[name]]
+// class NameAttr extends Attr {
+//   upgrade() {
+//     Object.defineProperty(this.ownerElement, "value", {
+//       get: function getValue() {
+//         if (this.hasAttribute("value"))
+//           return this.getAttribute("value");
+//         if (this.hasAttribute("src"))
+//           return this.getAttribute("value");
+//         //todo how should this work, should I look for the .value on the prototype??
+//         // if("value" in Object.getPrototypeOf(this))
+//         //   return Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this), "value").get.call(this);
+//         if (!this.children.length)
+//           return this.innerText;
+//         const res = [];
+//         for (let child of this.children)
+//           res.push(this.getAttribute("name"));
+//         return res;
+//       }
+//     });
+//   }
+//
+//   remove() {
+//     delete this.ownerElement.value;
+//   }
+// }
+//
+// customAttributes.define("name", NameAttr);
 
 function openViaTemporaryForm(href, target, enctype, elements) {
   var form = document.createElement("form");
@@ -91,19 +91,22 @@ function navigate() {
   window.open(href, target);
 }
 
+//todo make this return a querySelectorAll directly.
 function getElements() {
-  // const withName = this.querySelectorAll(":root > [name], :root :not([name]) [name]");
-  // todo this instead
   const withName = this.querySelectorAll("[name]");
   return [...withName].filter((el, i, ar) => (el.value !== undefined && ar.indexOf(el) === i));
 }
 
+//todo if this returns a set of entries, then it is almost unnecessary.
 function getValues() {
+  return Object.fromEntries(this.elements.map(el => [el.getAttribute("name"), el.value]));
   const res = {};
   for (let el of this.elements)
     res[el.getAttribute("name")] = el.value;
   return res;
 }
+
+//elements => becomes [names] , and [action] demands the use of [names] will require the use of the [names] on the element as well.
 
 class ActionAttr extends Attr {
   upgrade() {
@@ -155,7 +158,11 @@ function getFormData() {
     formData.append(input.getAttribute("name"), input.value);//todo fix blobs
   return formData;
 }
-
+                                                                    //values=formData  //values=json  //values=urlencoded //values
+                                                                    //.elements  when values is added, then we get the .elements.
+                                                                    //values adds all the different types, but is sets the default .values to be a particular type
+                                                                    //submit to the fetch or whatever, then we let the submit event use the default .values,
+                                                                    //and then the values=formData or whatever is set from the values.
 class AjaxAttr extends Attr {
   upgrade() {
     Object.defineProperty(this.ownerElement, "elements", {get: getElements});

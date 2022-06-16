@@ -1,0 +1,38 @@
+<div values="formData">
+  <ol name="list">
+    <li name="one">one</li>
+    <li name="two">two</li>
+  </ol>
+  <input name="jonas" value="bob" type="text">
+  <img name="sunshine" src="img.src" alt="">
+  <span><h1 name="omg">what is this</h1>
+    </span>
+  <web-comp name="webcomp"></web-comp>
+</div>
+
+<script type="module">
+  class WebComp extends HTMLElement {
+    get value() {
+      return "wwweeebbb";
+    }
+  }
+
+  customElements.define("web-comp", WebComp);
+
+  import {upgradeAttributes} from "../../src/customAttributes.js";
+  import {NameAttr} from "../../src/name.js";
+  import {ValuesAttr} from "../../src/values.js";
+
+  customAttributes.define("name", NameAttr);
+  customAttributes.define("values", ValuesAttr);
+
+  upgradeAttributes(...document.body.querySelectorAll("[name], [values]"));
+  console.log(
+    document.querySelector("div").values,
+    document.querySelector("ol").value,
+    document.querySelector("img").value,
+    document.querySelector("input").value,
+    document.querySelector("h1").value,
+    document.querySelector("web-comp").value
+  );
+</script>
