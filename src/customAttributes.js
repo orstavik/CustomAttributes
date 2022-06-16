@@ -1,3 +1,5 @@
+import {} from "https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.1/src/customEvents.js";
+
 function throwAsyncError(err) {
   const event = new Event("error", err);
   event.defaultAction = _=> console.error(err);
