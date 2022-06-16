@@ -22,11 +22,11 @@
 
   customAttributes.define("pushstate", Pushstate_values_Attr);
 
-  const loc = location.href;
   const div = document.querySelector("div");
   div.getAttributeNode("pushstate-click").value = location.href + div.getAttributeNode("pushstate-click").value;
   upgradeAttributes(div);
+
+  const loc = location.href;
   div.click();
   setTimeout(_=> console.log(location.href.substring(loc.length)));
-  // window.addEventListener("popstate", e=> console.log(location.hash));
 </script>
