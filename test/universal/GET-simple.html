@@ -8,7 +8,10 @@
 
   customAttributes.define("get", GETAttr);
 
-  window.open = (...args) => console.log(...args.map(s => s.slice(-9)));//this is an interception to enable testing.
+  window.open = function (url, ...args) { //intercept navigation for testing purposes
+    const [path, ...queryHash] = url.split(/[?#]/);
+    console.log(queryHash.join("#"), ...args);
+  };
 
   const h1 = document.querySelector("h1");
   h1.getAttributeNode("get-click").value = location.href + h1.getAttributeNode("get-click").value;

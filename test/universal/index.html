@@ -53,9 +53,15 @@
   </script>
 </test-html>
 
-<test-html test="GET_simple.html">
+<test-html test="GET-simple.html">
   <script expected>
-    [["#sunshine", "_self"]]
+    [["8#sunshine", "_self"]]
+  </script>
+</test-html>
+
+<test-html test="GET-query.html">
+  <script expected>
+    ["a=a1&a=a2&a=a3%3Ba4%3Ba5&b=%3Ch3+name%3D%22b%22%3Ebob%3C%2Fh3%3E#9#sunshine"]
   </script>
 </test-html>
 
