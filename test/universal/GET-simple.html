@@ -4,9 +4,9 @@
   import {} from "https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.1/src/Event.defaultAction.js";
   import {} from "https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.1/src/customEvents.js";
   import {upgradeAttributes} from "../../src/customAttributes.js";
-  import {GETAttr} from "../../src/attributes/GetAttr.js";
+  import {GET_self_Attr} from "../../src/attributes/GetAttr.js";
 
-  customAttributes.define("get", GETAttr);
+  customAttributes.define("get", GET_self_Attr);
 
   window.open = function (url, ...args) { //intercept navigation for testing purposes
     const [path, ...queryHash] = url.split(/[?#]/);
