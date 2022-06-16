@@ -1,4 +1,4 @@
-<div post-click="#sunshine">
+<div pushstate-click="#bob">
   hello sunshine
   <div>
     <div>ignore</div>
@@ -18,17 +18,15 @@
   import {} from "https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.1/src/Event.defaultAction.js";
   import {} from "https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.1/src/customEvents.js";
   import {upgradeAttributes} from "../../src/customAttributes.js";
-  import {POST_self_formdata_Attr} from "../../src/attributes/navigation/PostAttr.js";
+  import {Pushstate_values_Attr} from "../../src/attributes/navigation/PushstateAttr.js";
 
-  customAttributes.define("post", POST_self_formdata_Attr);
+  customAttributes.define("pushstate", Pushstate_values_Attr);
 
-  HTMLFormElement.prototype.submit = function(){
-    for (let [name, value] of new FormData(this).entries())
-    console.log(name, value);
-  }
-
+  const loc = location.href;
   const div = document.querySelector("div");
-  div.getAttributeNode("post-click").value = location.href + div.getAttributeNode("post-click").value;
+  div.getAttributeNode("pushstate-click").value = location.href + div.getAttributeNode("pushstate-click").value;
   upgradeAttributes(div);
   div.click();
+  setTimeout(_=> console.log(location.href.substring(loc.length)));
+  // window.addEventListener("popstate", e=> console.log(location.hash));
 </script>
