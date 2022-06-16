@@ -1,4 +1,10 @@
-<test-html test="on-click.html">
+<test-html test="core/on-click-simple.html">
+  <script expected>
+    ["Hello sunshine click"]
+  </script>
+</test-html>
+
+<test-html test="core/on-click.html">
   <script expected>
     [
       "Hello sunshine click",
@@ -7,38 +13,45 @@
       "Goodbye sunshine contextmenu",
       "Hello sunshine contextmenu",
       "Goodbye sunshine auxclick"
-    ]  </script>
+    ]
+  </script>
 </test-html>
 
-<test-html test="once-click.html">
+<test-html test="core/once-click.html">
   <script expected>
     ["Hello sunshine click"]
   </script>
 </test-html>
 
-<test-html test="no-submit.html">
+<test-html test="core/no-click.html">
   <script expected>
-    ["hello sunshine submit1", "more sunshine"]
+    ["only sunshine"]
   </script>
 </test-html>
 
-<test-html test="re-click.html">
+<test-html test="core/no-submit-native.html">
+  <script expected>
+    ["only sunshine"]
+  </script>
+</test-html>
+
+<test-html test="core/re-click.html">
   <script expected>
     ["hi click", "hi click"]
   </script>
 </test-html>
 
-<test-html test="attr-click_open_parent.html">
+<test-html test="core/attr-click_open_parent.html">
   <script expected>
     ["none", "block"]
   </script>
 </test-html>
 
-<test-html test="co-click-toggle-at-toggle.html">
+<test-html test="core/co-click-toggle-at-toggle.html">
   <script expected>
     ["none", "block"]
   </script>
 </test-html>
 
 <!-- Note!! You must load the test-html component at the end -->
-<script src="https://cdn.jsdelivr.net/gh/orstavik/TestHTML@v1.0.2/TestHTML.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/TestHTML@v1.0.3/TestHTML.js"></script>

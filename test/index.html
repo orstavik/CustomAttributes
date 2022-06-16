@@ -1,0 +1,14 @@
+<h1>Core</h1>
+<div href="core.html"></div>
+<h1>Navigation</h1>
+<div href="navigation.html"></div>
+
+<script src="https://cdn.jsdelivr.net/gh/orstavik/TestHTML@v1.0.3/TestHTML.js"></script>
+<script>
+  (async function () {
+    for (let test of document.querySelectorAll("div:not([off])")) {
+      const href = new URL(test.getAttribute('href'), location.href);
+      test.innerHTML = await (await fetch(href)).text();
+    }
+  })();
+</script>

@@ -1,0 +1,18 @@
+<h1 on-click="sayHi">hi</h1>
+
+<script type="module">
+  import {} from "https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.1/src/Event.defaultAction.js";
+  import {} from "https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.1/src/customEvents.js";
+  import {upgradeAttributes} from "../../src/customAttributes.js";
+  import {OnAttr} from "../../src/attributes/OnAttr.js";
+
+  customAttributes.define("on", OnAttr);
+
+  const h1 = document.querySelector("h1");
+  h1.sayHi = function (e) {
+    console.log("Hello sunshine "+ e.type);
+  }.bind(h1);
+
+  upgradeAttributes(h1);
+  h1.click();
+</script>

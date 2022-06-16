@@ -1,0 +1,34 @@
+<div post-click="#sunshine">
+  hello sunshine
+  <div>
+    <div>ignore</div>
+  </div>
+  <div name>ignore</div>
+  <h1 name="a" value="a1">hello world</h1>
+  <h2 name="a" src="a2">hello everybody</h2>
+  <ol name="a">
+    <li name="a3"><span name="x" value="not included">what</span></li>
+    <li name="a4">is</li>
+    <li name="a5">this</li>
+  </ol>
+  <h3 name="b">bob</h3>
+</div>
+
+<script type="module">
+  import {} from "https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.1/src/Event.defaultAction.js";
+  import {} from "https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.1/src/customEvents.js";
+  import {upgradeAttributes} from "../../src/customAttributes.js";
+  import {POST_self_formdata_Attr} from "../../src/attributes/navigation/PostAttr.js";
+
+  customAttributes.define("post", POST_self_formdata_Attr);
+
+  HTMLFormElement.prototype.submit = function(){
+    for (let [name, value] of new FormData(this).entries())
+    console.log(name, value);
+  }
+
+  const div = document.querySelector("div");
+  div.getAttributeNode("post-click").value = location.href + div.getAttributeNode("post-click").value;
+  upgradeAttributes(div);
+  div.click();
+</script>
