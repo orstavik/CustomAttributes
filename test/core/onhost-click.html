@@ -1,0 +1,30 @@
+<script src="https://cdn.jsdelivr.net/gh/orstavik/parse@v1.0.1/parse.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/ElementObserver/constructionFrame.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.3/src/customEventsSync.js"></script>
+<script src="../../src/customAttributesAuto.js"></script>
+
+<my-container>hello sunshine</my-container>
+
+<script type="module">
+  import {OnhostAttr} from "../../src/attributes/OnhostAttr.js";
+  customAttributes.define("onhost", OnhostAttr);
+
+  class MyContainer extends HTMLElement {
+    constructor() {
+      super();
+      this.attachShadow({mode: "open"});
+      this.shadowRoot.innerHTML = `
+<div onhost-click="bob">click me</div>
+<slot></slot>
+`;
+    }
+
+    bob(e){
+      console.log("hello sunshine " + e.type);
+    }
+  }
+  customElements.define("my-container", MyContainer);
+
+  const myContainer = document.querySelector("my-container");
+  myContainer.shadowRoot.children[0].click();
+</script>

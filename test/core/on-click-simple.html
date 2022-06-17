@@ -1,7 +1,11 @@
+<script src="https://cdn.jsdelivr.net/gh/orstavik/parse@v1.0.1/parse.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/ElementObserver/constructionFrame.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.3/src/customEventsSync.js"></script>
+<script src="../../src/customAttributesAuto.js"></script>
+
 <h1 on-click="sayHi">hi</h1>
 
 <script type="module">
-  import {upgradeAttributes} from "../../src/customAttributes.js";
   import {OnAttr} from "../../src/attributes/OnAttr.js";
 
   customAttributes.define("on", OnAttr);
@@ -11,6 +15,5 @@
     console.log("Hello sunshine "+ e.type);
   }.bind(h1);
 
-  upgradeAttributes(h1);
   h1.click();
 </script>
