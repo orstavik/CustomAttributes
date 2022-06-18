@@ -1,0 +1,30 @@
+<script src="https://cdn.jsdelivr.net/gh/orstavik/parse@v1.0.1/parse.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/ElementObserver/constructionFrame.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.3/src/customEventsSync.js"></script>
+<script src="../../src/customAttributesAuto.js"></script>
+
+<h1 bob-click="BOB">hi</h1>
+
+<script type="module">
+
+  customAttributes.define("bob", class BobAttr extends Attr {
+    upgrade() {
+      console.log("upgrade");
+    }
+
+    onEvent(e) {
+      console.log("event " + e.type);
+    }
+
+    onChange(v) {
+      console.log("change oldValue " + v);
+    }
+
+    remove() {
+      console.log("remove");
+    }
+  });
+  const h1 = document.querySelector("h1");
+  h1.click();
+  h1.removeAttribute("bob-click");
+</script>
