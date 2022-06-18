@@ -6,7 +6,7 @@ function throwAsyncError(err) {
 
 const customAttributesImpl = {};
 const syncAttrs = {};
-const notUpgradedAttr = [];         //todo make into an array of WeakRef
+let notUpgradedAttr = [];         //todo make into an array of WeakRef
 window.customAttributes = {};
 Object.defineProperty(window.customAttributes, "define", {
   value: function (key, constructor, options) {
@@ -16,6 +16,7 @@ Object.defineProperty(window.customAttributes, "define", {
     if (options?.sync) syncAttrs[key] = constructor.prototype;          //todo remove the .prototype here.
     for (let at of notUpgradedAttr)
       upgradeClass(at)
+    notUpgradedAttr = notUpgradedAttr.filter(at => at.constructor === Attr);
   }
 });
 
@@ -27,7 +28,8 @@ function upgradeClass(at) {
     return;
   try {
     Object.setPrototypeOf(at, definition.prototype);
-    at.upgrade && at.upgrade();
+    at.upgrade?.();
+    at.onChange?.();
   } catch (err) {
     throwAsyncError(err);
   }
@@ -46,7 +48,7 @@ function defineCompoundAttribute(name) {
       upgrade() {
         super.upgrade && super.upgrade();
         //todo make the this._listener stored in a WeakMap. and should we make the e.defaultAction in a method on this element?
-        this._listener = sync ?
+        this._listener = !!sync ?
           e => this.onEvent(e) :
           e => e.defaultAction = _ => this.onEvent(e);
         this.ownerElement.addEventListener(eventName, this._listener);
@@ -69,3 +71,42 @@ ElementObserver.end(el => {
     at.constructor === Attr && notUpgradedAttr.push(at);
   }
 });
+
+function deprecate(name) {
+  return function deprecated() {
+    throw `${name}() is deprecated`;
+  }
+}
+
+// Monkeypatch Attr. only setAttribute, getAttribute and removeAttribute (and in template) works.
+// The .attributes gives a fallback method to access the Attr objects from JS.
+(function (getAttrOG, setAttrOG, removeAttrOG, getAttrNodeOG) {
+  Element.prototype.getAttributeNS = deprecate("Element.getAttributeNS");
+  Element.prototype.setAttributeNS = deprecate("Element.setAttributeNS");
+  Element.prototype.removeAttributeNS = deprecate("Element.removeAttributeNS");
+  Element.prototype.getAttributeNode = deprecate("Element.getAttributeNode");
+  Element.prototype.setAttributeNode = deprecate("Element.setAttributeNode");
+  Element.prototype.removeAttributeNode = deprecate("Element.removeAttributeNode");
+  Element.prototype.getAttributeNodeNS = deprecate("Element.getAttributeNodeNS");
+  Element.prototype.setAttributeNodeNS = deprecate("Element.setAttributeNodeNS");
+  Element.prototype.removeAttributeNodeNS = deprecate("Element.removeAttributeNodeNS");
+  document.createAttribute = deprecate("document.createAttribute");
+
+  Element.prototype.setAttribute = function (name, value) {
+    if (this.hasAttribute(name)) {
+      const at = getAttrNodeOG.call(this, name);
+      const oldValue = getAttrOG.call(this, name);
+      setAttrOG.call(this, name, value);
+      at.onChange?.(oldValue);
+    } else {
+      setAttrOG.call(this, name, value);
+      const at = getAttrNodeOG.call(this, name);
+      upgradeClass(at);
+      at.constructor === Attr && notUpgradedAttr.push(at);
+    }
+  };
+  Element.prototype.removeAttribute = function (name) {
+    getAttrNodeOG.call(this, name)?.remove?.();
+    removeAttrOG.call(this, name);
+  };
+})(Element.prototype.getAttribute, Element.prototype.setAttribute, Element.prototype.removeAttribute, Element.prototype.getAttributeNode);

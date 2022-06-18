@@ -1,0 +1,27 @@
+<test-html test="customAttributes/deprecation.html">
+  <script expected>
+    [
+      "document.createAttribute() is deprecated",
+      "Element.setAttributeNS() is deprecated",
+      "Element.getAttributeNode() is deprecated",
+      "Element.removeAttributeNode() is deprecated"
+    ]
+  </script>
+</test-html>
+<test-html test="customAttributes/testRemoveAttribute.html">
+  <script expected>
+    ["upgrade", "change oldValue undefined", "remove", "event click"]
+  </script>
+</test-html>
+<test-html test="customAttributes/testMonkeypatch.html">
+  <script expected>
+    [
+      "Hello sunshine click",
+      "----- Log: sayHi",
+      [{"isTrusted":false},{}]
+    ]
+  </script>
+</test-html>
+
+<!-- Note!! You must load the test-html component at the end -->
+<script src="https://cdn.jsdelivr.net/gh/orstavik/TestHTML@v1.0.3/TestHTML.js"></script>
