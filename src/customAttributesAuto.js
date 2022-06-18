@@ -81,6 +81,7 @@ function deprecate(name) {
 // Monkeypatch Attr. only setAttribute, getAttribute and removeAttribute (and in template) works.
 // The .attributes gives a fallback method to access the Attr objects from JS.
 (function (getAttrOG, setAttrOG, removeAttrOG, getAttrNodeOG) {
+  Element.prototype.hasAttributeNS = deprecate("Element.hasgetAttributeNS");
   Element.prototype.getAttributeNS = deprecate("Element.getAttributeNS");
   Element.prototype.setAttributeNS = deprecate("Element.setAttributeNS");
   Element.prototype.removeAttributeNS = deprecate("Element.removeAttributeNS");
