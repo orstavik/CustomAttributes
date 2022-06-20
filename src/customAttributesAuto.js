@@ -27,7 +27,7 @@ function upgradeClass(at) {
   if (!definition)
     return;
   try {
-    Object.setPrototypeOf(at, definition.prototype);
+    Object.setPrototypeOf(at, definition);
     at.upgrade?.();
     at.onChange?.();
   } catch (err) {
