@@ -23,11 +23,11 @@ Object.defineProperty(window.customAttributes, "define", {
 function upgradeClass(at) {
   if (at.constructor !== Attr)
     return;
-  const definition = customAttributesImpl[at.name] ??= defineCompoundAttribute(at.name)
+  const definition = customAttributesImpl[at.name] ??= defineCompoundAttribute(at.name)?.prototype;
   if (!definition)
     return;
   try {
-    Object.setPrototypeOf(at, definition.prototype);
+    Object.setPrototypeOf(at, definition);
     at.upgrade?.();
     at.onChange?.();
   } catch (err) {
@@ -58,7 +58,7 @@ function defineCompoundAttribute(name) {
         this.ownerElement.removeEventListener(eventName, this._listener);
         super.remove && super.remove();
       }
-    }
+    };
   }
   //else
   // todo with unknown definition, we can turn it simply into a call on the method
