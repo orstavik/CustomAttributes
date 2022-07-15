@@ -29,8 +29,8 @@
   }
 
   customAttributes.define("log", class LogAttr extends Attr {
-    onEvent({detail: {url, method, args, data}}) {
-      doLog(this.value, [url, method, args, data]);
+    onEvent( {detail: {url, method, args, data, form}}) {
+      doLog(this.value, [url, method, args, data, form]);
     }
   });
 

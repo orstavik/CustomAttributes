@@ -39,7 +39,7 @@ function POSTFormDataAttr(returnType) {             //formdata is only useful fo
         formData.append(k, v);
       for (let k of url.searchParams.keys())
         url.searchParams.delete(k);
-      doFetchAndEvents(this.ownerElement, this.value, formData, "POST", returnType);
+      doFetchAndEvents(this.ownerElement, url, formData, "POST", returnType);
     }
   }
 }

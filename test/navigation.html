@@ -35,9 +35,9 @@
 
 <test-html test="navigation/get_json.html">
   <script expected>[[
-    ["1", ["https://httpbin.org/anything?hello=sunshine", "GET", {"hello": "sunshine"}, ""]],
-    ["2", ["https://httpbin.org/anything?hello=sunshine", "POST", {"hello": "sunshine"}, ""]],
-    ["3", ["https://httpbin.org/anything", "POST", {}, "hello=sunshine"]]
+    ["1", ["https://httpbin.org/anything?hello=sunshine", "GET", {"hello": "sunshine"}, "", {}]],
+    ["2", ["https://httpbin.org/anything", "POST", {}, "", {"hello":["sunshine","sunshine"]}]],
+    ["3", ["https://httpbin.org/anything", "POST", {}, "hello=sunshine", {}]]
   ]]</script>
 </test-html>
 
