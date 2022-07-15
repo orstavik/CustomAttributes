@@ -1,12 +1,12 @@
 <script src="https://cdn.jsdelivr.net/gh/orstavik/parse@v1.0.1/parse.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/orstavik/ElementObserver/constructionFrame.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.3/src/customEventsSync.js"></script>
+<script src="../../src/customAttributesAuto.js"></script>
 
 <h1 :no-click>
   <span on-click="helloSunshine">hello</span>
 </h1>
 <script type="module">
-  import {} from "../../src/customAttributesAuto.js";
   import {PreventAttr} from "../../src/attributes/PreventAttr.js";
   import {OnAttr} from "../../src/attributes/OnAttr.js";
 
