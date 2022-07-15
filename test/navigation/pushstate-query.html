@@ -1,3 +1,8 @@
+<script src="https://cdn.jsdelivr.net/gh/orstavik/parse@v1.0.1/parse.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/ElementObserver/constructionFrame.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.3/src/customEventsSync.js"></script>
+<script src="../../src/customAttributesAuto.js"></script>
+
 <div pushstate-click="#bob">
   hello sunshine
   <div>
@@ -15,14 +20,12 @@
 </div>
 
 <script type="module">
-  import {upgradeAttributes} from "../../src/customAttributes.js";
   import {Pushstate_values_Attr} from "../../src/attributes/navigation/PushstateAttr.js";
 
   customAttributes.define("pushstate", Pushstate_values_Attr);
 
   const div = document.querySelector("div");
-  div.getAttributeNode("pushstate-click").value = location.href + div.getAttributeNode("pushstate-click").value;
-  upgradeAttributes(div);
+  div.setAttribute("pushstate-click", location.href + div.getAttribute("pushstate-click"));
 
   const loc = location.href;
   div.click();

@@ -1,7 +1,11 @@
+<script src="https://cdn.jsdelivr.net/gh/orstavik/parse@v1.0.1/parse.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/ElementObserver/constructionFrame.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.3/src/customEventsSync.js"></script>
+<script src="../../src/customAttributesAuto.js"></script>
+
 <h1 get-click="#sunshine">hello sunshine</h1>
 
 <script type="module">
-  import {upgradeAttributes} from "../../src/customAttributes.js";
   import {GET_self_Attr} from "../../src/attributes/navigation/GetAttr.js";
 
   customAttributes.define("get", GET_self_Attr);
@@ -12,7 +16,6 @@
   };
 
   const h1 = document.querySelector("h1");
-  h1.getAttributeNode("get-click").value = location.href + h1.getAttributeNode("get-click").value;
-  upgradeAttributes(h1);
+  h1.setAttribute("get-click", location.href + h1.getAttribute("get-click"));
   h1.click();
 </script>
