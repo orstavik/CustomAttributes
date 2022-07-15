@@ -14,9 +14,10 @@ Object.defineProperty(window.customAttributes, "define", {
       throw new Error(key + " already defined");
     customAttributesImpl[key] = constructor.prototype;
     if (options?.sync) syncAttrs[key] = constructor.prototype;          //todo remove the .prototype here.
-    for (let at of notUpgradedAttr)
+    const notUpgraded = notUpgradedAttr.slice();
+    notUpgradedAttr = [];
+    for (let at of notUpgraded)
       upgradeClass(at)
-    notUpgradedAttr = notUpgradedAttr.filter(at => at.constructor === Attr);
   }
 });
 
@@ -25,7 +26,7 @@ function upgradeClass(at) {
     return;
   const definition = customAttributesImpl[at.name] ??= defineCompoundAttribute(at.name)?.prototype;
   if (!definition)
-    return;
+    return notUpgradedAttr.push(at);
   try {
     Object.setPrototypeOf(at, definition);
     at.upgrade?.();
@@ -46,7 +47,7 @@ function defineCompoundAttribute(name) {
     const CustomAttr = def.constructor;
     return class CompoundAttribute extends CustomAttr {
       upgrade() {
-        super.upgrade?.upgrade();
+        super.upgrade?.();
         //todo make the this._listener stored in a WeakMap. and should we make the e.defaultAction in a method on this element?
         this._listener = !!sync ?
           e => this.onEvent(e) :
@@ -56,7 +57,7 @@ function defineCompoundAttribute(name) {
 
       remove() {
         this.ownerElement.removeEventListener(eventName, this._listener);
-        super.remove?.remove();
+        super.remove?.();
       }
     };
   }
@@ -66,10 +67,8 @@ function defineCompoundAttribute(name) {
 }
 
 ElementObserver.end(el => {
-  for (let at of el.attributes) {
+  for (let at of el.attributes)
     upgradeClass(at);
-    at.constructor === Attr && notUpgradedAttr.push(at);
-  }
 });
 
 function deprecate(name) {
@@ -103,7 +102,6 @@ function deprecate(name) {
       setAttrOG.call(this, name, value);
       const at = getAttrNodeOG.call(this, name);
       upgradeClass(at);
-      at.constructor === Attr && notUpgradedAttr.push(at);
     }
   };
   Element.prototype.removeAttribute = function (name) {
