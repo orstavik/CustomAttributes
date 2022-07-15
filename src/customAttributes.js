@@ -2,7 +2,7 @@ import {} from "https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.2/src/cust
 
 function throwAsyncError(err) {
   const event = new Event("error", err);
-  event.defaultAction = _=> console.error(err);
+  event.defaultAction = _ => console.error(err);
   window.dispatchEvent(event);
 }
 
@@ -43,8 +43,8 @@ function defineCompoundAttribute(name) {
         super.upgrade && super.upgrade();
         //todo make the this._listener stored in a WeakMap. and should we make the e.defaultAction in a method on this element?
         this._listener = sync ?
-            e => this.onEvent(e) :
-            e => e.defaultAction = _ => this.onEvent(e);
+          e => this.onEvent(e) :
+          e => e.defaultAction = _ => this.onEvent(e);
         this.ownerElement.addEventListener(eventName, this._listener);
       }
 
