@@ -33,5 +33,13 @@
   </script>
 </test-html>
 
+<test-html test="navigation/ajax_json.html">
+  <script expected>[[
+    ["1", ["https://httpbin.org/anything?hello=sunshine", "GET", {"hello": "sunshine"}, ""]],
+    ["2", ["https://httpbin.org/anything?hello=sunshine", "POST", {"hello": "sunshine"}, ""]],
+    ["3", ["https://httpbin.org/anything", "POST", {}, "hello=sunshine"]]
+  ]]</script>
+</test-html>
+
 <!-- Note!! You must load the test-html component at the end -->
 <script src="https://cdn.jsdelivr.net/gh/orstavik/TestHTML@v1.0.3/TestHTML.js"></script>
