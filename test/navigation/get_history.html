@@ -10,8 +10,8 @@
 
   customAttributes.define("get", GET_history_Attr);
 
-  console.log(location.href);
-  window.addEventListener("popstate", e => console.log(location.href));
+  console.log(location.href.substring(location.href.length - 9));
+  window.addEventListener("popstate", e => console.log(location.href.substring(location.href.length - 9)));
   const h1 = document.querySelector("h1");
   h1.click();
 </script>
