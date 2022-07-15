@@ -1,4 +1,12 @@
-<!DOCTYPE html>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/parse@v1.0.1/parse.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/ElementObserver/constructionFrame.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.3/src/customEventsSync.js"></script>
+<script src="../../src/customAttributesAuto.js"></script>
+<script type="module">
+  import {PreventAttr} from "../../src/attributes/PreventAttr.js";
+
+  customAttributes.define("no", PreventAttr);
+</script>
 
 <style>
   [at-toggle]:not([open]) > :not(h1) {
@@ -8,14 +16,8 @@
 
 <h2>here is context menu and text selection</h2>
 
-<h2 no-contextmenu>no context menu here, but there is text selection</h2>
+<h2 :no-contextmenu>no context menu here, but there is text selection</h2>
 
-<h2 no-selectstart>no text selection here, but there is context menu</h2>
+<h2 :no-selectstart>no text selection here, but there is context menu</h2>
 
-<h2 no-selectstart no-contextmenu>no text selection nor contextmenu</h2>
-
-<script type="module">
-  import {upgradeAttributes} from "../../src/customAttributes.js";
-
-  upgradeAttributes(...document.querySelectorAll("*"));
-</script>
+<h2 :no-selectstart :no-contextmenu>no text selection nor contextmenu</h2>

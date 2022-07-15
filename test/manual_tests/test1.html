@@ -1,6 +1,20 @@
-<!DOCTYPE html>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/parse@v1.0.1/parse.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/ElementObserver@v.1.0.2/constructionFrame.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.3/src/customEventsSync.js"></script>
+<script src="../../src/customAttributesAuto.js"></script>
 
-<script>
+<web-comp once-auxclick="high low high high">hello auxclick</web-comp>
+<h1 on-click_shift="toggle highlight">hello on-click_shift</h1>
+<h4 hello="sunshine" on-click="iHaveBeenReclicked">hello re-click target</h4>
+
+<script type="module">
+  import {OnAttr, OnceAttr} from "../../src/attributes/OnAttr.js";
+  import {ReAttr} from "../../src/attributes/ReAttr.js";
+
+  customAttributes.define("on", OnAttr);
+  customAttributes.define("once", OnceAttr);
+  customAttributes.define("re", ReAttr);
+
   class WebComp extends HTMLElement {
     constructor() {
       super();
@@ -37,21 +51,12 @@
   }
 
   customElements.define("web-comp", WebComp);
-</script>
-
-<web-comp once-auxclick="high low high high">hello auxclick</web-comp>
-<h1 on-click_shift="toggle highlight">hello on-click_shift</h1>
-<h4 hello="sunshine" on-click="iHaveBeenReclicked">hello re-click target</h4>
-
-<script type="module">
-  import {upgradeAttributes} from "../../src/customAttributes.js";
 
   const h1 = document.querySelector("h1");
   const webComp = document.querySelector("web-comp");
   const hrInsideShadow = webComp.hr;
   hrInsideShadow.setAttribute("re-click", '[hello="sunshine"]');
   const h4 = document.querySelector("h4");
-  upgradeAttributes(h1, webComp, h4, hrInsideShadow);
 
   h4.iHaveBeenReclicked = function (e) {
     console.log("i have been reclicked");
