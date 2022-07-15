@@ -40,19 +40,28 @@ function defineCompoundAttribute(name) {
     return;
   const [_, sync, atName, eventName] = compound;
   const CustomAttr = customAttributesImpl[atName];
-  if (CustomAttr) {
+  let listener;
+  if (CustomAttr && sync) {
     return class CompoundAttribute extends CustomAttr {
       upgrade() {
         super.upgrade?.();
-        //todo make the this._listener stored in a WeakMap. and should we make the e.defaultAction in a method on this element?
-        this._listener = !!sync ?
-          e => this.onEvent(e) :
-          e => e.defaultAction = _ => this.onEvent(e);
-        this.ownerElement.addEventListener(eventName, this._listener);
+        this.ownerElement.addEventListener(eventName, listener = e => this.onEvent(e));
       }
 
       remove() {
-        this.ownerElement.removeEventListener(eventName, this._listener);
+        this.ownerElement.removeEventListener(eventName, listener);
+        super.remove?.();
+      }
+    };
+  } else if (CustomAttr) {
+    return class CompoundAttribute extends CustomAttr {
+      upgrade() {
+        super.upgrade?.();
+        this.ownerElement.addEventListener(eventName, listener = e => e.defaultAction = _ => this.onEvent(e));
+      }
+
+      remove() {
+        this.ownerElement.removeEventListener(eventName, listener);
         super.remove?.();
       }
     };
