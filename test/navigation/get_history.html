@@ -1,0 +1,17 @@
+<script src="https://cdn.jsdelivr.net/gh/orstavik/parse@v1.0.1/parse.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/ElementObserver/constructionFrame.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.3/src/customEventsSync.js"></script>
+<script src="../../src/customAttributes.js"></script>
+
+<h1 get-click="#sunshine">hello sunshine</h1>
+
+<script type="module">
+  import {GET_history_Attr} from "../../src/attributes/navigation2/AjaxAttr.js";
+
+  customAttributes.define("get", GET_history_Attr);
+
+  console.log(location.href);
+  window.addEventListener("popstate", e => console.log(location.href));
+  const h1 = document.querySelector("h1");
+  h1.click();
+</script>

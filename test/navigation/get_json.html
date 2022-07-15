@@ -9,15 +9,15 @@
 
 <script type="module">
   import {
-    GET_Attr_json,
-    POST_formdata_Attr_json,
-    POST_uriComponent_Attr_json
+    GET_json_Attr,
+    POST_json_formdata_Attr,
+    POST_json_uriComponent_Attr
   } from "../../src/attributes/navigation2/AjaxAttr.js";
 
 
-  customAttributes.define("get", GET_Attr_json);
-  customAttributes.define("formdata", POST_formdata_Attr_json);
-  customAttributes.define("uricomponents", POST_uriComponent_Attr_json);
+  customAttributes.define("get", GET_json_Attr);
+  customAttributes.define("formdata", POST_json_formdata_Attr);
+  customAttributes.define("uricomponents", POST_json_uriComponent_Attr);
 
   const log = {};
 

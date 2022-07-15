@@ -11,13 +11,19 @@ async function doFetchAndEvents(el, url, body, method, returnType) {
 
 //receives: [ [key, value], [key2, value2], [key, value2] ]. An entry map.
 
-function GETAttr(returnType = "text") {
+function GETAttr(returnType = "_self") {
   return class AjaxAttr extends Attr {
     onEvent({detail: entries}) {
-      const url = new URL(this.value);
-      for (let [k, v] of entries)
-        url.searchParams.set(k, v);
-      doFetchAndEvents(this.ownerElement, url, null, "GET", returnType);
+      const url = new URL(this.value, location);
+      if (entries)
+        for (let [k, v] of entries)
+          url.searchParams.set(k, v);
+      if (returnType === "text" || returnType === "json")
+        doFetchAndEvents(this.ownerElement, url, null, "GET", returnType);
+      else if (["_self", "_blank", "_parent", "_top"].includes(returnType))
+        open(url, returnType);
+      else if (returnType === "history")
+        history.pushState({}, null, url), window.dispatchEvent(new Event("popstate"));
     }
   }
 }
@@ -52,11 +58,18 @@ function POSTUrlEncodedAttr(returnType) {
   }
 }
 
+//method_target_enctype_Attr
+
 export const GET_Attr = GETAttr();
-export const GET_Attr_json = GETAttr("json");
+export const GET_text_Attr = GETAttr("text");
+export const GET_json_Attr = GETAttr("json");
+export const GET_history_Attr = GETAttr("history");
+export const GET__blank_Attr = GETAttr("_blank");
+export const GET__parent_Attr = GETAttr("_parent");
+export const GET__top_Attr = GETAttr("_top");
 
-export const POST_formdata_Attr = POSTFormDataAttr();
-export const POST_formdata_Attr_json = POSTFormDataAttr("json");
+export const POST_text_formdata_Attr = POSTFormDataAttr("text");
+export const POST_json_formdata_Attr = POSTFormDataAttr("json");
 
-export const POST_uriComponent_Attr = POSTUrlEncodedAttr();
-export const POST_uriComponent_Attr_json = POSTUrlEncodedAttr("json");
+export const POST_text_uriComponent_Attr = POSTUrlEncodedAttr("text");
+export const POST_json_uriComponent_Attr = POSTUrlEncodedAttr("json");
