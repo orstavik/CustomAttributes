@@ -8,7 +8,7 @@ const customAttributesImpl = {};
 let notUpgradedAttr = [];         //todo make into an array of WeakRef
 window.customAttributes = {};
 Object.defineProperty(window.customAttributes, "define", {
-  value: function (key, constructor/*, options*/) {
+  value: function (key, constructor) {
     if (customAttributesImpl[key])
       throw new Error(key + " already defined");
     customAttributesImpl[key] = constructor.prototype;        //todo remove the .prototype here.
