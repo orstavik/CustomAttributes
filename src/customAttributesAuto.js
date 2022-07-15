@@ -46,7 +46,7 @@ function defineCompoundAttribute(name) {
     const CustomAttr = def.constructor;
     return class CompoundAttribute extends CustomAttr {
       upgrade() {
-        super.upgrade && super.upgrade();
+        super.upgrade?.upgrade();
         //todo make the this._listener stored in a WeakMap. and should we make the e.defaultAction in a method on this element?
         this._listener = !!sync ?
           e => this.onEvent(e) :
@@ -56,7 +56,7 @@ function defineCompoundAttribute(name) {
 
       remove() {
         this.ownerElement.removeEventListener(eventName, this._listener);
-        super.remove && super.remove();
+        super.remove?.remove();
       }
     };
   }
