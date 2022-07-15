@@ -42,7 +42,7 @@ function defineCompoundAttribute(name) {
       upgrade() {
         super.upgrade && super.upgrade();
         //todo make the this._listener stored in a WeakMap. and should we make the e.defaultAction in a method on this element?
-        this._listener = sync ?
+        this._listener = !!sync ?
           e => this.onEvent(e) :
           e => e.defaultAction = _ => this.onEvent(e);
         this.ownerElement.addEventListener(eventName, this._listener);
@@ -52,7 +52,7 @@ function defineCompoundAttribute(name) {
         this.ownerElement.removeEventListener(eventName, this._listener);
         super.remove && super.remove();
       }
-    }
+    };
   }
   //else
   // todo with unknown definition, we can turn it simply into a call on the method
