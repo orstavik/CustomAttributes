@@ -9,6 +9,26 @@ async function doFetchAndEvents(el, url, body, method, returnType) {
   }
 }
 
+function openForm(href, target, enctype, nameValues) {
+  const form = document.createElement("form");
+  form.method = "POST";
+  form.action = href;
+  form.target = target;
+  form.enctype = enctype;
+  form.style.display = "none";
+
+  for (let [name, value] of nameValues) {
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = name;
+    input.value = value;
+    form.appendChild(input);
+  }
+  document.body.appendChild(form);
+  form.submit();
+  form.remove();
+}
+
 //receives: [ [key, value], [key2, value2], [key, value2] ]. An entry map.
 
 function GETAttr(returnType = "_self") {
@@ -58,6 +78,18 @@ function POSTUrlEncodedAttr(returnType) {
   }
 }
 
+function POSTAttr(target = "_self", enctype = "application/x-www-form-urlencoded") {
+  return class AjaxAttr extends Attr {
+    onEvent({detail: entries}) {
+      const url = new URL(this.value);
+      const body = [...entries, ...url.searchParams];
+      for (let k of url.searchParams.keys())
+        url.searchParams.delete(k);
+      openForm(url, target, enctype, body);
+    }
+  }
+}
+
 //method_target_enctype_Attr
 
 export const GET_Attr = GETAttr();
@@ -73,3 +105,14 @@ export const POST_json_formdata_Attr = POSTFormDataAttr("json");
 
 export const POST_text_uriComponent_Attr = POSTUrlEncodedAttr("text");
 export const POST_json_uriComponent_Attr = POSTUrlEncodedAttr("json");
+
+//todo the Post form data are untested.
+export const POST_uriComponent_Attr = POSTAttr();
+export const POST__blank_uriComponent_Attr = POSTAttr("_blank");
+export const POST__parent_uriComponent_Attr = POSTAttr("_parent");
+export const POST__top_uriComponent_Attr = POSTAttr("_top");
+
+export const POST_formdata_Attr = POSTAttr("_self", "multipart/form-data");
+export const POST__blank_formdata_Attr = POSTAttr("_blank", "multipart/form-data");
+export const POST__parent_formdata_Attr = POSTAttr("_parent", "multipart/form-data");
+export const POST__top_formdata_Attr = POSTAttr("_top", "multipart/form-data");
