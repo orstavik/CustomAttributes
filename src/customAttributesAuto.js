@@ -20,8 +20,6 @@ Object.defineProperty(window.customAttributes, "define", {
 });
 
 function upgradeClass(at) {
-  if (at.constructor !== Attr)
-    return;
   const CustomAttr = customAttributesImpl[at.name] ??= defineCompoundAttribute(at.name);
   if (!CustomAttr)
     return notUpgradedAttr.push(at);
