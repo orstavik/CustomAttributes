@@ -5,15 +5,13 @@ function throwAsyncError(err) {
 }
 
 const customAttributesImpl = {};
-// const syncAttrs = {};
 let notUpgradedAttr = [];         //todo make into an array of WeakRef
 window.customAttributes = {};
 Object.defineProperty(window.customAttributes, "define", {
   value: function (key, constructor/*, options*/) {
     if (customAttributesImpl[key])
       throw new Error(key + " already defined");
-    customAttributesImpl[key] = constructor.prototype;
-    // if (options?.sync) syncAttrs[key] = constructor.prototype;          //todo remove the .prototype here.
+    customAttributesImpl[key] = constructor.prototype;        //todo remove the .prototype here.
     const notUpgraded = notUpgradedAttr.slice();
     notUpgradedAttr = [];
     for (let at of notUpgraded)
@@ -43,7 +41,6 @@ function defineCompoundAttribute(name) {
   const [_, sync, atName, eventName] = compound;
   const def = customAttributesImpl[atName];
   if (def) {
-    // const sync = syncAttrs[atName];
     const CustomAttr = def.constructor;
     return class CompoundAttribute extends CustomAttr {
       upgrade() {
