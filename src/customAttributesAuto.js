@@ -11,7 +11,7 @@ Object.defineProperty(window.customAttributes, "define", {
   value: function (key, constructor) {
     if (customAttributesImpl[key])
       throw new Error(key + " already defined");
-    customAttributesImpl[key] = constructor.prototype;        //todo remove the .prototype here.
+    customAttributesImpl[key] = constructor;
     const notUpgraded = notUpgradedAttr.slice();
     notUpgradedAttr = [];
     for (let at of notUpgraded)
@@ -22,11 +22,11 @@ Object.defineProperty(window.customAttributes, "define", {
 function upgradeClass(at) {
   if (at.constructor !== Attr)
     return;
-  const definition = customAttributesImpl[at.name] ??= defineCompoundAttribute(at.name)?.prototype;
-  if (!definition)
+  const CustomAttr = customAttributesImpl[at.name] ??= defineCompoundAttribute(at.name);
+  if (!CustomAttr)
     return notUpgradedAttr.push(at);
   try {
-    Object.setPrototypeOf(at, definition);
+    Object.setPrototypeOf(at, CustomAttr.prototype);
     at.upgrade?.();
     at.onChange?.();
   } catch (err) {
@@ -39,9 +39,8 @@ function defineCompoundAttribute(name) {
   if (!compound)
     return;
   const [_, sync, atName, eventName] = compound;
-  const def = customAttributesImpl[atName];
-  if (def) {
-    const CustomAttr = def.constructor;
+  const CustomAttr = customAttributesImpl[atName];
+  if (CustomAttr) {
     return class CompoundAttribute extends CustomAttr {
       upgrade() {
         super.upgrade?.();
