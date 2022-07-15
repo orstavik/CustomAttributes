@@ -67,6 +67,7 @@ function defineCompoundAttribute(name) {
   //else
   // todo with unknown definition, we can turn it simply into a call on the method
   //  with the same name on the element? be turned into method calls on the element??
+  // todo NO! if we want to do this, then we need to mark this syntactically I think. If not, there will be naming overlaps in big applications.
 }
 
 ElementObserver.end(el => {
@@ -82,7 +83,7 @@ function deprecate(name) {
 
 // Monkeypatch Attr. only setAttribute, getAttribute and removeAttribute (and in template) works.
 // The .attributes gives a fallback method to access the Attr objects from JS.
-(function (getAttrOG, setAttrOG, removeAttrOG, getAttrNodeOG) {
+(function (getAttrOG, setAttrOG, removeAttrOG, getAttrNodeOG, documentCreateAttributeOG, setAttributeNodeOG) {
   Element.prototype.hasAttributeNS = deprecate("Element.hasgetAttributeNS");
   Element.prototype.getAttributeNS = deprecate("Element.getAttributeNS");
   Element.prototype.setAttributeNS = deprecate("Element.setAttributeNS");
@@ -99,11 +100,14 @@ function deprecate(name) {
     if (this.hasAttribute(name)) {
       const at = getAttrNodeOG.call(this, name);
       const oldValue = getAttrOG.call(this, name);
-      setAttrOG.call(this, name, value);
+      if (value !== undefined)
+        at.value = value;
       at.onChange?.(oldValue);
     } else {
-      setAttrOG.call(this, name, value);
-      const at = getAttrNodeOG.call(this, name);
+      const at = documentCreateAttributeOG.call(document, name);
+      if (value !== undefined)
+        at.value = value;
+      setAttributeNodeOG.call(this, at);
       upgradeClass(at);
     }
   };
@@ -111,4 +115,4 @@ function deprecate(name) {
     getAttrNodeOG.call(this, name)?.remove?.();
     removeAttrOG.call(this, name);
   };
-})(Element.prototype.getAttribute, Element.prototype.setAttribute, Element.prototype.removeAttribute, Element.prototype.getAttributeNode);
+})(Element.prototype.getAttribute, Element.prototype.setAttribute, Element.prototype.removeAttribute, Element.prototype.getAttributeNode, document.createAttribute, Element.prototype.setAttributeNode);
