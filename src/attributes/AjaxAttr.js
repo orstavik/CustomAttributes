@@ -55,7 +55,7 @@ function POSTFormDataAttr(returnType) {             //formdata is only useful fo
       const formData = new FormData();
       for (let [name, value] of entries)
         formData.append(name, value);
-      for (let [k, v] of url.searchParams)
+      for (let [k, v] of url.searchParams.entries())
         formData.append(k, v);
       for (let k of url.searchParams.keys())
         url.searchParams.delete(k);
@@ -69,7 +69,7 @@ function POSTUrlEncodedAttr(returnType) {
     onEvent({detail: entries}) {
       const url = new URL(this.value);
       for (let [k, v] of entries)
-        url.searchParams.set(k, v);
+        url.searchParams.append(k, v);
       const body = url.searchParams.toString();
       for (let k of url.searchParams.keys())
         url.searchParams.delete(k);
@@ -82,7 +82,7 @@ function POSTAttr(target = "_self", enctype = "application/x-www-form-urlencoded
   return class AjaxAttr extends Attr {
     onEvent({detail: entries}) {
       const url = new URL(this.value);
-      const body = [...entries, ...url.searchParams];
+      const body = [...entries, ...url.searchParams.entries()];
       for (let k of url.searchParams.keys())
         url.searchParams.delete(k);
       openForm(url, target, enctype, body);
