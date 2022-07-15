@@ -1,3 +1,8 @@
+<script src="https://cdn.jsdelivr.net/gh/orstavik/parse@v1.0.1/parse.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/ElementObserver/constructionFrame.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.3/src/customEventsSync.js"></script>
+<script src="../../src/customAttributesAuto.js"></script>
+
 <style>
   #bob:not([open]) > :not(h1) {
     display: none;
@@ -10,15 +15,12 @@
 </div>
 
 <script type="module">
-  import {upgradeAttributes} from "../../src/customAttributes.js";
   import {AttrAttr} from "../../src/attributes/AttrAttr.js";
 
   customAttributes.define("attr", AttrAttr);
 
-  const div = document.querySelector("div");
   const h1 = document.querySelector("h1");
   const p = document.querySelector("p");
-  upgradeAttributes(div, h1);
   console.log(getComputedStyle(p).display);
   h1.click();
   setTimeout(()=>console.log(getComputedStyle(p).display), 0);

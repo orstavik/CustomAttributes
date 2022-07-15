@@ -52,7 +52,7 @@ export class AttrAttr extends Attr {
     //filter away, so that if a parent element is a <slot>, then we must skip all the other elements up to and including that slot elements document.
     const target = findNearestParentMatching(path, query);
     if (!propName)
-      target.hasAttribute(atName) ? target.removeAttribute(atName) : target.setAttributeNode(document.createAttribute(atName));
+      target.hasAttribute(atName) ? target.removeAttribute(atName) : target.setAttribute(atName, "");
     else
       target.setAttribute(atName, this.ownerElement[propName]);
   }
