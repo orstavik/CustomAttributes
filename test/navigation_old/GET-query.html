@@ -1,3 +1,8 @@
+<script src="https://cdn.jsdelivr.net/gh/orstavik/parse@v1.0.1/parse.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/ElementObserver/constructionFrame.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.3/src/customEventsSync.js"></script>
+<script src="../../src/customAttributes.js"></script>
+
 <div get-click="#sunshine">
   hello sunshine
   <div>
@@ -15,8 +20,7 @@
 </div>
 
 <script type="module">
-  import {upgradeAttributes} from "../../src/customAttributes.js";
-  import {GET_self_values_Attr} from "../../src/attributes/navigation/GetAttr.js";
+  import {GET_self_values_Attr} from "../../src/attributes/navigation_old/GetAttr.js";
 
   customAttributes.define("get", GET_self_values_Attr);
 
@@ -26,7 +30,6 @@
   };
 
   const div = document.querySelector("div");
-  div.getAttributeNode("get-click").value = location.href + div.getAttributeNode("get-click").value;
-  upgradeAttributes(div);
+  div.setAttribute("get-click", location.href + div.getAttribute("get-click"));
   div.click();
 </script>

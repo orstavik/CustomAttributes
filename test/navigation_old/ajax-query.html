@@ -1,3 +1,8 @@
+<script src="https://cdn.jsdelivr.net/gh/orstavik/parse@v1.0.1/parse.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/ElementObserver/constructionFrame.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.3/src/customEventsSync.js"></script>
+<script src="../../src/customAttributes.js"></script>
+
 <div ajax-click="https://httpbin.org/anything">
   hello sunshine
   <div>
@@ -15,14 +20,9 @@
 </div>
 
 <script type="module">
-  import {upgradeAttributes} from "../../src/customAttributes.js";
-  import {AJAX_post_formdata_Attr} from "../../src/attributes/navigation/AjaxAttr.js";
+  import {AJAX_post_formdata_Attr} from "../../src/attributes/navigation_old/AjaxAttr.js";
 
   customAttributes.define("ajax", AJAX_post_formdata_Attr);
-
   document.addEventListener("load", e => console.log(e.detail.form));
-
-  const div = document.querySelector("div");
-  upgradeAttributes(div);
-  div.click();
+  document.querySelector("div").click();
 </script>

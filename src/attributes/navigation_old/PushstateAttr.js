@@ -12,6 +12,8 @@ export class Pushstate_values_Attr extends Attr {
   }
 }
 
+//todo this we can just turn into a _history target for the GET, right?
+
 export class PushstateAttr extends Attr {
   onEvent(e) {
     history.pushState({}, "", this.value);

@@ -1,3 +1,8 @@
+<script src="https://cdn.jsdelivr.net/gh/orstavik/parse@v1.0.1/parse.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/ElementObserver/constructionFrame.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.3/src/customEventsSync.js"></script>
+<script src="../../src/customAttributes.js"></script>
+
 <div post-click="#sunshine">
   hello sunshine
   <div>
@@ -15,8 +20,7 @@
 </div>
 
 <script type="module">
-  import {upgradeAttributes} from "../../src/customAttributes.js";
-  import {POST_self_formdata_Attr} from "../../src/attributes/navigation/PostAttr.js";
+  import {POST_self_formdata_Attr} from "../../src/attributes/navigation_old/PostAttr.js";
 
   customAttributes.define("post", POST_self_formdata_Attr);
 
@@ -26,7 +30,6 @@
   }
 
   const div = document.querySelector("div");
-  div.getAttributeNode("post-click").value = location.href + div.getAttributeNode("post-click").value;
-  upgradeAttributes(div);
+  div.setAttribute("post-click", location.href + div.getAttribute("post-click"));
   div.click();
 </script>

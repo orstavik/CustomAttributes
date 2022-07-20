@@ -1,18 +1,18 @@
-<h1 log-click="hello sync sunshine" log2-click_shift="hello async sunshine">log: click, and shift_click async</h1>
-<h2 debugger-click debugger2-click_shift>debugger: click, and shift_click async</h2>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/parse@v1.0.1/parse.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/ElementObserver/constructionFrame.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.3/src/customEventsSync.js"></script>
+<script src="../../src/customAttributes.js"></script>
+
+<h1 :log-click="hello sync sunshine" log-click_shift="hello async sunshine">log: click, and shift_click async</h1>
+<h2 :debugger-click debugger-click_shift>debugger: click, and shift_click async</h2>
 
 <script type="module">
-  import {upgradeAttributes} from "../../src/customAttributes.js";
   import {LogAttr, DebuggerAttr} from "../../src/attributes/LogDebuggerAttr.js";
 
-  customAttributes.define("log", LogAttr, {sync: true});
-  customAttributes.define("debugger", DebuggerAttr, {sync: true});
-  customAttributes.define("log2", LogAttr);
-  customAttributes.define("debugger2", DebuggerAttr);
+  customAttributes.define("log", LogAttr);
+  customAttributes.define("debugger", DebuggerAttr);
 
   const h1 = document.querySelector("h1");
-  const h2 = document.querySelector("h2");
-  upgradeAttributes(h1, h2);
   h1.click();
   h1.dispatchEvent(new MouseEvent("click", {shiftKey: true}));
 </script>

@@ -59,5 +59,16 @@
   </script>
 </test-html>
 
+<test-html test="core/log-debugger.html">
+  <script expected>[
+    "----- Log: hello sync sunshine",
+    [{"isTrusted": false}, {}],
+    "----- Log: hello sync sunshine",
+    [{"isTrusted": false}, {}],
+    "----- Log: hello async sunshine",
+    [{"isTrusted": false}, {}]
+  ]  </script>
+</test-html>
+
 <!-- Note!! You must load the test-html component at the end -->
 <script src="https://cdn.jsdelivr.net/gh/orstavik/TestHTML@v1.0.3/TestHTML.js"></script>

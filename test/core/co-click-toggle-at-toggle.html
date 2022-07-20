@@ -1,3 +1,8 @@
+<script src="https://cdn.jsdelivr.net/gh/orstavik/parse@v1.0.1/parse.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/ElementObserver/constructionFrame.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.3/src/customEventsSync.js"></script>
+<script src="../../src/customAttributes.js"></script>
+
 <style>
   [at-toggle]:not([open]) > :not(h1) {
     display: none;
@@ -10,17 +15,15 @@
 </div>
 
 <script type="module">
-  import {upgradeAttributes} from "../../src/customAttributes.js";
   import {CoAttr} from "../../src/attributes/CoAttr.js";
   import {AtAttr} from "../../src/attributes/AtAttr.js";
 
   customAttributes.define("co", CoAttr);
   customAttributes.define("at", AtAttr);
 
-  const div = document.querySelector("div");
   const h1 = document.querySelector("h1");
   const p = document.querySelector("p");
-  upgradeAttributes(div, h1);
+
   console.log(getComputedStyle(p).display);
   h1.click();
   setTimeout(_ => console.log(getComputedStyle(p).display), 20);

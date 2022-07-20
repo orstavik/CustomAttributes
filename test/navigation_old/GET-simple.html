@@ -1,0 +1,21 @@
+<script src="https://cdn.jsdelivr.net/gh/orstavik/parse@v1.0.1/parse.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/ElementObserver/constructionFrame.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.3/src/customEventsSync.js"></script>
+<script src="../../src/customAttributes.js"></script>
+
+<h1 get-click="#sunshine">hello sunshine</h1>
+
+<script type="module">
+  import {GET_self_Attr} from "../../src/attributes/navigation_old/GetAttr.js";
+
+  customAttributes.define("get", GET_self_Attr);
+
+  window.open = function (url, ...args) { //intercept navigation for testing purposes
+    const [path, ...queryHash] = url.split(/[?#]/);
+    console.log(queryHash.join("#"), ...args);
+  };
+
+  const h1 = document.querySelector("h1");
+  h1.setAttribute("get-click", location.href + h1.getAttribute("get-click"));
+  h1.click();
+</script>
