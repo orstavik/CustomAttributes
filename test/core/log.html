@@ -4,13 +4,11 @@
 <script src="../../src/customAttributes.js"></script>
 
 <h1 :log-click="hello sync sunshine" log-click_shift="hello async sunshine">log: click, and shift_click async</h1>
-<h2 :debugger-click debugger-click_shift>debugger: click, and shift_click async</h2>
 
 <script type="module">
-  import {LogAttr, DebuggerAttr} from "../../src/attributes/LogDebuggerAttr.js";
+  import {LogAttr} from "../../src/attributes/LogDebuggerAttr.js";
 
   customAttributes.define("log", LogAttr);
-  customAttributes.define("debugger", DebuggerAttr);
 
   const h1 = document.querySelector("h1");
   h1.click();
