@@ -61,13 +61,13 @@
 
 <test-html test="core/log.html">
   <script expected>[
-    "----- Log: hello sync sunshine",
+    "BottomListener",
     [{"isTrusted": false}, {}],
-    "----- Log: hello sync sunshine",
+    "TopListener",
     [{"isTrusted": false}, {}],
-    "----- Log: hello async sunshine",
+    "DefaultActionBottom",
     [{"isTrusted": false}, {}]
-  ]  </script>
+  ]</script>
 </test-html>
 
 <!-- Note!! You must load the test-html component at the end -->

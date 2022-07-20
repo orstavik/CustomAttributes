@@ -3,14 +3,20 @@
 <script src="https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.3/src/customEventsSync.js"></script>
 <script src="../../src/customAttributes.js"></script>
 
-<h1 :log-click="hello sync sunshine" log-click_shift="hello async sunshine">log: click, and shift_click async</h1>
+<div :log-click="TopListener">
+  <div :log-click="BottomListener">
+    <div log-click="DefaultActionTop">
+      <span log-click="DefaultActionBottom">
+        hello sunshine
+      </span>
+    </div>
+  </div>
+</div>
 
 <script type="module">
   import {LogAttr} from "../../src/attributes/LogDebuggerAttr.js";
 
   customAttributes.define("log", LogAttr);
 
-  const h1 = document.querySelector("h1");
-  h1.click();
-  h1.dispatchEvent(new MouseEvent("click", {shiftKey: true}));
+  document.querySelector("span").dispatchEvent(new MouseEvent("click", {bubbles: true}));
 </script>
