@@ -55,14 +55,7 @@ function defineCompoundAttribute(name) {
     return class CompoundAttribute extends CustomAttr {
       upgrade() {
         super.upgrade?.();
-        this.ownerElement.addEventListener(eventName, listener = e => {
-          try {
-            e.defaultAction = _ => this.onEvent(e)
-          } catch (err) {
-            //todo we should probably simplify the defaultAction setter so that it doesn't throw an Error.
-            // so that we don't need the try catch here.
-          }
-        });
+        this.ownerElement.addEventListener(eventName, listener = e => e.defaultAction = e => this.onEvent(e));
       }
 
       remove() {
