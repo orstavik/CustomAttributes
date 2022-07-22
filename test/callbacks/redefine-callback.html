@@ -1,0 +1,47 @@
+<script src="https://cdn.jsdelivr.net/gh/orstavik/parse@v1.0.1/parse.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/ElementObserver/constructionFrame.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.4/src/customEventsSync.js"></script>
+<script src="../../src/customAttributes.js"></script>
+
+<web-comp>hello on-click shadow</web-comp>
+
+<script type="module">
+    import {OnceAttr} from "../../src/attributes/OnAttr.js";
+
+    customAttributes.define("on", OnceAttr);
+
+    let spanShadow;
+    let divShadow;
+
+    class webComponent extends HTMLElement {
+        constructor() {
+            super();
+            this.attachShadow({mode: "open"});
+            //language=html
+            this.shadowRoot.innerHTML = `
+                <span :on-click="sayHello">Hello</span>
+                <div on-click="sayGoodbye">Sunshine</div>`;
+            spanShadow = this.shadowRoot.querySelector("span");
+            divShadow = this.shadowRoot.querySelector("div");
+            spanShadow.sayHello = this.sayHello;
+            setTimeout(_ => spanShadow.sayHello = this.sayMyName, 5);
+            setTimeout(_ => divShadow.sayGoodbye = this.sayMyName, 10);
+        }
+
+        sayHello(e) {
+            console.log("Hello world", e.type, e.target.tagName);
+        }
+
+        sayMyName(e) {
+            console.log("Walter White", e.type, e.target.tagName);
+        }
+
+        sayGoodbye(e) {
+            console.log("Goodbye world", e.type, e.target.tagName);
+        }
+    }
+
+    customElements.define("web-comp", webComponent);
+    setTimeout(_ => spanShadow.dispatchEvent(new PointerEvent("click")), 20);
+    setTimeout(_ => divShadow.dispatchEvent(new PointerEvent("click")), 20);
+</script>
