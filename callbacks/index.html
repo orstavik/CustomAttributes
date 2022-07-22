@@ -1,0 +1,30 @@
+<test-html test="inherited-methods.html">
+    <script expected>
+        [
+            "Hello sunshine",
+            "Goodbye sunshine"
+        ]
+    </script>
+</test-html>
+
+<test-html test="set-callback-property.html">
+    <script expected>
+        [
+            ["Hello world", "click", "SPAN"],
+            ["Goodbye world", "click", "DIV"]
+        ]
+    </script>
+</test-html>
+
+<test-html test="redefine-callback.html">
+    <script expected>
+        [
+            ["Walter White", "click", "SPAN"],
+            ["Walter White", "click", "DIV"]
+        ]
+    </script>
+</test-html>
+
+
+<!-- Note!! You must load the test-html component at the end -->
+<script src="https://cdn.jsdelivr.net/gh/orstavik/TestHTML@v1.0.3/TestHTML.js"></script>
