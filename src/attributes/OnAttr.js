@@ -5,9 +5,9 @@ function runMethods(at, e, target) {
         throw `'.${method}' is not a function on element <${target.tagName}>. Is it a typo?`;
       target[method](e);
     } catch (err) {
-      const event = new Event("error", err);
+      const event = new ErrorEvent(err);
       event.defaultAction = _ => console.error(err);
-      window.dispatchEvent(event); //todo don't fully remember how to do this one.
+      window.dispatchEvent(event); //todo we need to queue it using nextTick. audioRatechange
     }
   }
 }
