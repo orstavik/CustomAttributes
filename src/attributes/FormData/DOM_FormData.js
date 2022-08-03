@@ -47,13 +47,7 @@ class FormDataEvent extends CustomEvent {
 
 export class DOM_FormData extends Attr {
 
-  upgrade(){
-    this.eventName = this.name.substring(this.name.indexOf("-"));
-    if(this.eventName[0] === ":")
-      this.eventName = this.eventName.substring(1);
-  }
-
   onEvent() {
-    this.ownerElement.dispatchEvent(new FormDataEvent(this.eventName, this.ownerElement));
+    return new FormDataEvent(this.value, this.ownerElement);
   }
 }

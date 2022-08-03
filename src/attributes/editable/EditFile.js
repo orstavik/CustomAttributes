@@ -16,13 +16,11 @@ export class ImageEditAttr extends Attr {
     const input = document.createElement("input");
     input.type = "file";
     input.click();
-    const edit = new CustomEvent("edit", {
+    return new CustomEvent("edit", {
       composed: true,
       bubbles: true,
       detail: await ImageEditAttr.readImage(input.files[0])
     });
-    //todo how to test for cancellations?
-    this.ownerElement.dispatchEvent(edit);
   }
 
 

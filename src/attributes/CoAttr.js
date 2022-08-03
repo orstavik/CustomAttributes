@@ -23,6 +23,6 @@ function cloneEvent(e, type, relatedTarget = e.relatedTarget) {
 
 export class CoAttr extends Attr {
   onEvent(e) {
-    this.ownerElement.dispatchEvent(cloneEvent(e, this.value));
+    return cloneEvent(e, this.value);
   }
 }

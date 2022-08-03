@@ -46,6 +46,12 @@ function defineCompoundAttribute(name) {
         this.ownerElement.addEventListener(eventName, listener = e => this.onEvent(e));
       }
 
+      onEvent(e) {
+        const outputEvent = super.onEvent(e);
+        if (outputEvent && !e.defaultPrevented)
+          console.warn("an output event is ignored by an observing custom attribute: " + outputEvent.type);
+      }
+
       remove() {
         this.ownerElement.removeEventListener(eventName, listener);
         super.remove?.();
@@ -56,6 +62,12 @@ function defineCompoundAttribute(name) {
       upgrade() {
         super.upgrade?.();
         this.ownerElement.addEventListener(eventName, listener = e => e.defaultAction = e => this.onEvent(e));
+      }
+
+      onEvent(e) {
+        const outputEvent = super.onEvent(e);
+        if (outputEvent && outputEvent !== e && !e.defaultPrevented)
+          this.ownerElement.dispatchEvent(outputEvent);
       }
 
       remove() {
