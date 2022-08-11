@@ -51,12 +51,19 @@ export class FormData_History extends Attr {
     const url = formDataToEncodedUri(this.value, formData);
     history.pushState(null, null, url.href);
     window.dispatchEvent(new PopStateEvent("popstate"));
+    //todo This is a post-event/ consequence of the .pushState().
+    //todo that is why this event has a different target.
   }
 }
 
 function FormData_open_GET(target) {
   return class FormData_open_GET extends Attr {
     onEvent({detail: formData}) {
+      //todo here we would like a pre-event??
+      //dispatch an event, with an associated default action??
+      // const event = new Event("navigate", {bubbles: true, composed: true, cancelable: true, detail: this});
+      // event.defaultAction = e => window.open(formDataToEncodedUri(e.detail, formData), target);
+      // return event;//todo?? If we return an event, then this event will be dispatched at the end of the action??
       const url = formDataToEncodedUri(this.value, formData);
       window.open(url, target);
     }
