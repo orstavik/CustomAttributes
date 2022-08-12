@@ -1,0 +1,19 @@
+<script src="https://cdn.jsdelivr.net/gh/orstavik/parse@v1.0.1/parse.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/ElementObserver/constructionFrame.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.4/src/customEventsSync.js"></script>
+<script src="../../src/customAttributes.js"></script>
+
+<h1 ajax-submit="https://httpbin.org/anything?hello=sunshine">hello sunshine</h1>
+
+<script type="module">
+  import {GetFormDataJSON} from "../../src/attributes/FormData/AjaxAttr.js";
+
+  customAttributes.define("ajax", GetFormDataJSON);
+
+  document.addEventListener("load", e => console.log(e.type, e.detail.args));
+
+  const formData = new FormData();
+  formData.append("a", "A");
+  formData.append("b", "B");
+  document.querySelector("h1").dispatchEvent(new CustomEvent("submit", {details: formData}));
+</script>

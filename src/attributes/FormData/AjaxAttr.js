@@ -5,6 +5,8 @@ async function doFetchAndEvents(el, url, body, method, returnType) {
     const detail = await res[returnType]();
     el.dispatchEvent(new CustomEvent(eventType, {bubbles: true, composed: true, detail}));
   } catch (err) {
+    //todo we probably should not catch any errors inside the methods,
+    // as we need the error handling outside in the onEvent controller?
     el.dispatchEvent(new CustomEvent("error", {bubbles: true, composed: true, detail: err}));
   }
 }
@@ -44,14 +46,14 @@ function formDataToEncodedUri(formData, base, href) {
 }
 
 export class GetFormDataJSON extends Attr {
-  onEvent({detail: formData}){
+  onEvent({detail: formData}) {
     const url = formDataToEncodedUri(formData, location, this.value);
     doFetchAndEvents(this.ownerElement, url, null, "GET", "json");
   }
 }
 
 export class GetFormDataText extends Attr {
-  onEvent({detail: formData}){
+  onEvent({detail: formData}) {
     const url = formDataToEncodedUri(formData, location, this.value);
     doFetchAndEvents(this.ownerElement, url, null, "GET", "text");
   }
