@@ -32,6 +32,12 @@ function upgradeClass(at) {
   }
 }
 
+//todo when we make a compound attribute,
+// then we make an Attr class that will have the list of attributes as its static content.
+// then, on upgrade, it will make a series of children attribute objects. The problem is that these attribute objects
+// will not be on the main element. They don't have the .ownerElement nor nothing on themselves.
+// to fix this issue, we can implement the customAttributes as a mixin function instead. Not sure I super-like this.
+
 function defineCompoundAttribute(name) {
   const compound = name.match(/(:?)([^-]+)-(.+)/);
   if (!compound)
