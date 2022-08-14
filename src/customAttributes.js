@@ -52,8 +52,8 @@ function defineCompoundAttribute(name) {
         this.ownerElement.addEventListener(eventName, listener = e => this.onEvent(e));
       }
 
-      onEvent(e) {
-        const outputEvent = super.onEvent(e);
+      async onEvent(e) {
+        const outputEvent = await super.onEvent(e);
         if (outputEvent && !e.defaultPrevented)
           console.warn("an output event is ignored by an observing custom attribute: " + outputEvent.type);
       }
@@ -70,8 +70,8 @@ function defineCompoundAttribute(name) {
         this.ownerElement.addEventListener(eventName, listener = e => e.defaultAction = e => this.onEvent(e));
       }
 
-      onEvent(e) {
-        const outputEvent = super.onEvent(e);
+      async onEvent(e) {
+        const outputEvent = await super.onEvent(e);
         if (outputEvent && outputEvent !== e && !e.defaultPrevented)
           this.ownerElement.dispatchEvent(outputEvent);
       }

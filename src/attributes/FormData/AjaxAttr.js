@@ -1,14 +1,9 @@
 async function doFetchAndEvents(el, url, body, method, returnType) {
-  try {
     const res = await fetch(url, {body, method});
-    const eventType = res.status >= 200 && res.status < 300 ? "load" : "error";
+    if(res.status < 200 || res.status >= 300)
+      throw `Failed to fetch "${url.href}": ${res.status} ${res.statusText}.`
     const detail = await res[returnType]();
-    el.dispatchEvent(new CustomEvent(eventType, {bubbles: true, composed: true, detail}));
-  } catch (err) {
-    //todo we probably should not catch any errors inside the methods,
-    // as we need the error handling outside in the onEvent controller?
-    el.dispatchEvent(new CustomEvent("error", {bubbles: true, composed: true, detail: err}));
-  }
+    return new CustomEvent("load", {bubbles: true, composed: true, detail});
 }
 
 function openForm(href, target, enctype, nameValues) {
@@ -48,14 +43,14 @@ function formDataToEncodedUri(formData, base, href) {
 export class GetFormDataJSON extends Attr {
   onEvent({detail: formData}) {
     const url = formDataToEncodedUri(formData, location, this.value);
-    doFetchAndEvents(this.ownerElement, url, null, "GET", "json");
+    return doFetchAndEvents(this.ownerElement, url, null, "GET", "json");
   }
 }
 
 export class GetFormDataText extends Attr {
   onEvent({detail: formData}) {
     const url = formDataToEncodedUri(formData, location, this.value);
-    doFetchAndEvents(this.ownerElement, url, null, "GET", "text");
+    return doFetchAndEvents(this.ownerElement, url, null, "GET", "text");
   }
 }
 
@@ -64,7 +59,7 @@ function GETAttr(returnType = "_self") {
     onEvent({detail: formData}) {
       const url = formDataToEncodedUri(formData, location, this.value);
       if (returnType === "text" || returnType === "json")
-        doFetchAndEvents(this.ownerElement, url, null, "GET", returnType);
+        return doFetchAndEvents(this.ownerElement, url, null, "GET", returnType);
       else if (["_self", "_blank", "_parent", "_top"].includes(returnType))
         open(url, returnType);
       else if (returnType === "history")
@@ -84,7 +79,7 @@ function POSTFormDataAttr(returnType) {             //formdata is only useful fo
         formData.append(k, v);
       for (let k of url.searchParams.keys())
         url.searchParams.delete(k);
-      doFetchAndEvents(this.ownerElement, url, formData, "POST", returnType);
+      return doFetchAndEvents(this.ownerElement, url, formData, "POST", returnType);
     }
   }
 }
@@ -98,7 +93,7 @@ function POSTUrlEncodedAttr(returnType) {
       const body = url.searchParams.toString();
       for (let k of url.searchParams.keys())
         url.searchParams.delete(k);
-      doFetchAndEvents(this.ownerElement, url, body, "post", returnType);
+      return doFetchAndEvents(this.ownerElement, url, body, "post", returnType);
     }
   }
 }
