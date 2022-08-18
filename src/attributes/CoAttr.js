@@ -6,23 +6,20 @@ function getTargets(node) {
   return res;
 }
 
-function cloneEvent(e, type, relatedTarget = e.relatedTarget) {
-  const event = new e.constructor(type, e);
-  Object.defineProperty(event, "relatedTarget", {
-    get() {  //todo this leaks elements out of closed shadowDoms
-      return relatedTarget;
-    }
-  });
-  Object.defineProperty(event, "relatedTargetQueries", {
-    get() {
-      return getTargets(relatedTarget).map(el => el.tagName.toLowerCase() + (el.id ? "#" + el.id : ""));
-    }
-  });
-  return event;
-}
-
 export class CoAttr extends Attr {
   onEvent(e) {
-    return cloneEvent(e, this.value);
+    const relatedTarget = e.relatedTarget;
+    const clone = new e.constructor(this.value, e);
+    Object.defineProperty(clone, "relatedTarget", {
+      get() {  //todo this leaks elements out of closed shadowDoms
+        return relatedTarget;
+      }
+    });
+    Object.defineProperty(clone, "relatedTargetQueries", {
+      get() {
+        return getTargets(relatedTarget).map(el => el.tagName.toLowerCase() + (el.id ? "#" + el.id : ""));
+      }
+    });
+    return clone;
   }
 }
