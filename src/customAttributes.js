@@ -1,8 +1,11 @@
-function throwAsyncError(err) {
-  const event = new Event("error", err);
-  event.defaultAction = _ => console.error(err);
-  window.dispatchEvent(event);
+//todo should we make a window.dispatchEventInMacroTask() method?
+function nextTick(cb) {
+  const audio = document.createElement("audio");
+  audio.onratechange = cb;
+  audio.playbackRate = 2;
 }
+
+//todo update the error event so that it doesn't add `Uncaught ` infront of all error messages.
 
 const customAttributesImpl = {};
 let notUpgradedAttr = [];         //todo make into an array of WeakRef
@@ -27,8 +30,14 @@ function upgradeClass(at) {
     Object.setPrototypeOf(at, CustomAttr.prototype);
     at.upgrade?.();
     at.onChange?.();
-  } catch (err) {
-    throwAsyncError(err);
+  } catch (error) {
+    nextTick(_ => at.ownerElement.dispatchEvent(new ErrorEvent("error", {
+      error,
+      bubbles: true,
+      composed: true,
+      cancelable: true
+    })));
+    //any error that occurs during upgrade must be queued in the event loop.
   }
 }
 
@@ -53,9 +62,18 @@ function defineCompoundAttribute(name) {
       }
 
       async onEvent(e) {
-        const outputEvent = await super.onEvent(e);
-        if (outputEvent && !e.defaultPrevented)
-          console.warn("an output event is ignored by an observing custom attribute: " + outputEvent.type);
+        try {
+          const outputEvent = await super.onEvent(e);
+          if (outputEvent)
+            console.warn(`Output event "${outputEvent.type}" is ignored by an observing custom attribute.`);
+        } catch (error) {
+          nextTick(_ => this.ownerElement.dispatchEvent(new ErrorEvent("error", {
+            error,
+            bubbles: true,
+            composed: true,
+            cancelable: true
+          }))); //sync errors must be queued async
+        }
       }
 
       remove() {
@@ -71,9 +89,20 @@ function defineCompoundAttribute(name) {
       }
 
       async onEvent(e) {
-        const outputEvent = await super.onEvent(e);
-        if (outputEvent && outputEvent !== e && !e.defaultPrevented)
-          this.ownerElement.dispatchEvent(outputEvent);
+        try {
+          const outputEvent = await super.onEvent(e);                        //as this is run as a default action,
+          if (outputEvent /*&& outputEvent !== e && !e.defaultPrevented*/)   //e.defaultPrevented is already checked
+            this.ownerElement.dispatchEvent(outputEvent);
+          //todo this is the only time we should dispatch events, and this is at least the only time we should allow an event to be dispatched sync. because here it will function as if it was added to the nextTick queue.
+        } catch (error) {
+          this.ownerElement.dispatchEvent(new ErrorEvent("error", {
+            error,
+            bubbles: true,
+            composed: true,
+            cancelable: true
+          }));
+          //errors from defaultActions do not need to be queued asynchronously
+        }
       }
 
       remove() {

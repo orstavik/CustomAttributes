@@ -1,0 +1,27 @@
+<script src="https://cdn.jsdelivr.net/gh/orstavik/parse@v1.0.1/parse.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/ElementObserver/constructionFrame.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.6/src/customEventsSync.js"></script>
+<script src="../../src/customAttributes.js"></script>
+
+<div catch-error_childtarget="caught">
+  <div throw-click="hello error"></div>
+</div>
+
+<script type="module">
+  class CatchAttr extends Attr {
+    onEvent(e) {
+      console.log(this.value + e.error);
+    }
+  }
+
+  class ThrowingAttr extends Attr {
+    onEvent() {
+      throw new Error(this.value);
+    }
+  }
+
+  customAttributes.define("throw", ThrowingAttr);
+  customAttributes.define("catch", CatchAttr);
+
+  document.querySelector("[throw-click]").click();
+</script>

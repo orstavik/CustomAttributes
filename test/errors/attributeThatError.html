@@ -1,0 +1,22 @@
+<script src="https://cdn.jsdelivr.net/gh/orstavik/parse@v1.0.1/parse.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/ElementObserver/constructionFrame.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orstavik/customEvents@0.1.4/src/customEventsSync.js"></script>
+<script src="../../src/customAttributes.js"></script>
+
+<h1 throw-click>one</h1>
+<h2 :throw-click>two</h2>
+
+<script type="module">
+  class ThrowingAttr extends Attr {
+    onEvent(e) {
+      console.log("running reaction from " + e.target.innerText)
+      throw new Error(this.ownerElement.innerText);
+    }
+  }
+
+  customAttributes.define("throw", ThrowingAttr);
+
+  window.addEventListener("error", e => console.log(e.error.toString()));
+  document.querySelector("h1").click();
+  document.querySelector("h2").click();
+</script>
