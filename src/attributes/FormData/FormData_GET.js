@@ -50,7 +50,7 @@ export class FormData_History extends Attr {
   async onEvent({detail: formData}) {
     const url = formDataToEncodedUri(this.value, formData);
     history.pushState(null, null, url.href);
-    window.dispatchEvent(new PopStateEvent("popstate"));
+    window.dispatchEvent(new PopStateEvent("popstate"));        //todo this should be put inside the pushState() function
     //todo This is a post-event/ consequence of the .pushState().
     //todo that is why this event has a different target.
   }
